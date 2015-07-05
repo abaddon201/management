@@ -26,3 +26,5 @@
 *.exe
 *.out
 *.app
+management.pro.user
+deployment.pri
