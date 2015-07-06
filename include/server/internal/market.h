@@ -1,5 +1,6 @@
 #ifndef SERVER_INTERNAL_MARKET_H
 #define SERVER_INTERNAL_MARKET_H
+
 class Market {
 public:
 	Market();
@@ -10,4 +11,5 @@ private:
 	int _state;
 	int _current_number_of_players;
 };
+
 #endif //SERVER_INTERNAL_MARKET_H
