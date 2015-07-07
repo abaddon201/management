@@ -1,7 +1,7 @@
 #ifndef SERVER_INTERNAL_STORAGE_H
 #define SERVER_INTERNAL_STORAGE_H
-class Storage
-{
+
+class Storage {
 public:
 	Storage();
 	~Storage();
@@ -11,4 +11,5 @@ private:
 	// Хранящиеся на складе не реализованные материалы
 	int _raw_stored;
 };
+
 #endif //SERVER_INTERNAL_STORAGE_H

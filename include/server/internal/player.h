@@ -1,4 +1,4 @@
-#ifndef SERVER_INTERNAL_PLAYER_H
+﻿#ifndef SERVER_INTERNAL_PLAYER_H
 #define SERVER_INTERNAL_PLAYER_H
 
 #include <utility>
@@ -6,14 +6,14 @@
 #include <string>
 #include <list>
 
-#include "server/internal/storage.h"
-#include "server/internal/factory.h"
+#include "storage.h"
+#include "factory.h"
 
-class Player
-{
+class Player {
 	// Bid. Это пара целых чисел, первое из которых это количество единиц, а второе - цена.
 	// TODO: (tolstoy) Вообще стоит создание псевдонима вынести отсюда, поскольку оно будет нужно не только тут
-	using Bid = pair<int,int>;
+        // THINK: (abby) Зато тип будет красивый Player::Bid ... В общем, я бы не торопился
+    using Bid = std::pair<int,int>;
 	using f_iterator = std::list<std::shared_ptr<Factory>>::iterator;
 public:
 	Player();
@@ -22,9 +22,9 @@ private:
 	// Идентификатор игрока
 	int _id;
 	// Пароль игрока
-	string _password;
+    std::string _password;
 	// Псевдоним игрока
-	string nickname;
+    std::string nickname;
 	// Завершил ли пользователь свой ход
 	bool _if_made_turn;
 	// Ставка игрока на аукцион по покупке материалов
@@ -34,13 +34,14 @@ private:
 	// Склад продукции и материалов
 	Storage _storage_room;
 	// Количество функционирующих фабрик
-	int _number_of_working_factories
+    int _number_of_working_factories;
 	// Количество строящихся фабрик
-	int _number_of_factories_under_construction
+    int _number_of_factories_under_construction;
 	// Итератор спискa указателей на фабрики, находящиеся в стадии строительства
 	f_iterator fi_undercostruct;
 	// Имеющиеся в распоряжении средства
 	int _cash;
 
 };
+
 #endif //SERVER_INTERNAL_PLAYER_H
