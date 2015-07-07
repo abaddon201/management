@@ -4,7 +4,7 @@
 #include <utility>
 #include <memory>
 #include <string>
-#include <queue>
+#include <list>
 
 #include "storage.h"
 #include "factory.h"
@@ -14,7 +14,7 @@ class Player {
   // TODO: (tolstoy) Вообще стоит создание псевдонима вынести отсюда, поскольку оно будет нужно не только тут
     // THINK: (abby) Зато тип будет красивый Player::Bid ... В общем, я бы не торопился
   using Bid = std::pair<int,int>;
-  using f_iterator = std::queue<std::shared_ptr<Factory>>::iterator;
+  using f_iterator = std::list<std::shared_ptr<Factory>>::iterator;
 public:
   Player();
   ~Player();
@@ -38,7 +38,7 @@ private:
   ///@brief Количество строящихся фабрик
   int _number_of_factories_under_construction;
   ///@brief Итератор спискa указателей на фабрики, находящиеся в стадии строительства
-  std::queue<shared_ptr<Factory>> _factory_ptr_queue;
+  std::list<std::shared_ptr<Factory>> _factory_ptr_queue;
   ///@brief Имеющиеся в распоряжении деньги
   int _cash;
 };
