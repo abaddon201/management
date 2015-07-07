@@ -8,28 +8,31 @@
 #include "ruleset.h"
 
 class Session {
-	using Pit = std::list<std::shared_ptr<Player>>::iterator;
-    enum class State {
-        WAITING_FOR_PLAYERS,
-        PLAYING,
-        FINISHED
-    };
+  ///@brief Псевдоним для итератора по списку игроков 
+  using Pit = std::list<std::shared_ptr<Player>>::iterator;
+  ///@brief Состояние в котором сейчас находится сессия
+  enum class State {
+    WAITING_FOR_PLAYERS,
+    PLAYING,
+    FINISHED
+  };
 public:
-	Session();
-	~Session();
+  Session();
+  ~Session();
 private:
-	// Идентификатор сессии
-	int _id;
-	// Пароль для доступа к сессии
-    std::string _password;
-	// Итератор списка умных указателей на игроков
-	Pit _plistit;
-	//Указатель на рынок сессии
-	std::shared_ptr<Market> _market;
-    ///@brief Указатель на состав правил
-    std::shared_ptr<Ruleset> _ruleset;
-    ///@brief Состояние сессии
-    State _state;
+  ///@brief Идентификатор сессии
+  int _id;
+  ///@brief Пароль для доступа к сессии
+  std::string _password;
+  ///@brief Список умных указателей на игроков
+  // TODO:(tolstoy) а список ли? поменять на более разумное
+  std::list<std::shared_ptr<Player>> _player_pointer_list
+  ///@brief Указатель на рынок сессии
+  std::shared_ptr<Market> _market;
+  ///@brief Указатель на состав правил
+  std::shared_ptr<Ruleset> _ruleset;
+  ///@brief Состояние сессии
+  State _state;
 };
 
 #endif //SERVER_INTERNAL_SESSION_H

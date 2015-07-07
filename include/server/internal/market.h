@@ -3,13 +3,15 @@
 
 class Market {
 public:
-	Market();
-	~Market();
-	void changeState(int num_of_players);
+  Market();
+  ~Market();
+  ///@brief сменить состояние рынка
+  void changeState();
 private:
-	// Cостояние рынка. Рынок может занимать один из пяти уровней.
-	int _state;
-	int _current_number_of_players;
+  ///@brief Cостояние рынка. Рынок может занимать один из пяти уровней.
+  int _state;
+  ///@brief Текущее количество игроков
+  int _current_number_of_players;
 };
 
 #endif //SERVER_INTERNAL_MARKET_H
