@@ -16,8 +16,15 @@ class Player {
   using Bid = std::pair<int,int>;
   using f_iterator = std::list<std::shared_ptr<Factory>>::iterator;
 public:
-  Player();
+  ///@brief Псевдоним для списка игроков
+  using List = std::list<std::shared_ptr<Player>>;
+  ///@brief Псевдоним для итератора по списку игроков
+  using Iterator = Player::List::iterator;
+
+  Player() {_id = generateSomeUniqueId();}
   ~Player();
+  int getId() {return _id;}
+  int generateSomeUniqueId() {return std::rand();} ///@fixme: (abby): написать генератор уникального
 private:
   ///@brief Идентификатор игрока
   int _id;
