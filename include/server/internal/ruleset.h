@@ -10,16 +10,16 @@ class Ruleset {
     /// формат: кол-во (коэффициент, на который домножается кол-во необанкротившихся игроков), цена
     using MarketParam = std::pair<double,int>;
 public:
-	Ruleset();
+    Ruleset();
     Ruleset(int fc, int rc, int pc, ManufacturingCost mc, int m, int fbt, int sr, int sp, int sfc, int ms,
             std::vector<std::vector<double>> msm, std::vector<MarketParam> mr, std::vector<MarketParam> mp) :
-        _factory_cost{fc}, _raw_cost(rc), _product_cost(pc),
+        _factory_cost{fc}, _raw_cost{rc}, _product_cost{pc},
         _manufacturing_cost{mc},
         _money{m}, _factory_build_time{fbt}, _startup_raw{sr}, _startup_products{sp}, _startup_factory_count{sfc}, _market_state{ms},
         _market_state_matrix{msm}, _market_raw{mr}, _market_production{mp} {};
     ~Ruleset() {};
     ///@brief Стоимость содержания фабрики
-	int _factory_cost;
+    int _factory_cost;
     ///@brief Стоимость сырья оставшегося на складе
     int _raw_cost;
     ///@brief Стоимость продукции оставшейся на складе
