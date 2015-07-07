@@ -6,6 +6,7 @@
 #include "ruleset.h"
 #include "session.h"
 #include "storage.h"
+#include "server.h"
 ///
 
 int main() {
