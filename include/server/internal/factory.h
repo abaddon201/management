@@ -3,11 +3,11 @@
 
 class Factory {
 public:
-	Factory();
-	~Factory();
+  Factory();
+  ~Factory();
 private:
-	// Сколько месяцев осталось до окончания строительства
-	int _months_till_construction;
+  ///@brief Сколько месяцев осталось до окончания строительства фабрики
+  int _months_till_construction;
 };
 
 #endif //SERVER_INTERNAL_FACTORY_H

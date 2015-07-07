@@ -13,40 +13,40 @@ public:
   Ruleset();
   Ruleset(int tt, int fc, int rc, int pc, ManufacturingCost mc, int m, int fbt, int sr, int sp, int sfc, int ms,
           std::vector<std::vector<double>> msm, std::vector<MarketParam> mr, std::vector<MarketParam> mp) :
-      turn_timeout{tt},
-      factory_cost{fc}, raw_cost{rc}, product_cost{pc},
-      manufacturing_cost{mc},
-      money{m}, factory_build_time{fbt}, startup_raw{sr}, startup_products{sp}, startup_factory_count{sfc}, market_state{ms},
-      market_state_matrix{msm}, market_raw{mr}, market_production{mp} {};
+      _turn_timeout{tt},
+      _factory_cost{fc}, _raw_cost{rc}, _product_cost{pc},
+      _manufacturing_cost{mc},
+      _money{m}, _factory_build_time{fbt}, _startup_raw{sr}, _startup_products{sp}, _startup_factory_count{sfc}, _market_state{ms},
+      _market_state_matrix{msm}, _market_raw{mr}, _market_production{mp} {};
   ~Ruleset() {};
   ///@brief Ограничение времени на ход в секундах. Если отрицательное - время не ограничено
-  int turn_timeout;
+  int _turn_timeout;
   ///@brief Стоимость содержания фабрики
-  int factory_cost;
+  int _factory_cost;
   ///@brief Стоимость сырья оставшегося на складе
-  int raw_cost;
+  int _raw_cost;
   ///@brief Стоимость продукции оставшейся на складе
-  int product_cost;
+  int _product_cost;
   ///@brief Стоимость производства изделия (кол-во сырья, деньги)
   ManufacturingCost _manufacturing_cost;
   ///@brief Первоначальный капитал
-  int money;
+  int _money;
   ///@brief Время постройки фабрики
-  int factory_build_time;
+  int _factory_build_time;
   ///@brief Кол-во материала на старте
-  int startup_raw;
+  int _startup_raw;
   ///@brief Кол-во продукции на старте
-  int startup_products;
+  int _startup_products;
   ///@brief Кол-во фабрик на старте
-  int startup_factory_count;
+  int _startup_factory_count;
   ///@brief Состояние рынка на старте
-  int market_state;
+  int _market_state;
   ///@brief Таблица вероятностей перехода состояний рынка
-  std::vector<std::vector<double>> market_state_matrix;
+  std::vector<std::vector<double>> _market_state_matrix;
   ///@brief Таблица лимитов (стоимости) сырья, в зависимости от состояния рынка
-  std::vector<MarketParam> market_raw;
+  std::vector<MarketParam> _market_raw;
   ///@brief Таблица лимитов (стоимости) продукции, в зависимости от состояния рынка
-  std::vector<MarketParam> market_production;
+  std::vector<MarketParam> _market_production;
 };
 
 static const Ruleset DEFAULT_RULESET {
