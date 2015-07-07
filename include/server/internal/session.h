@@ -26,7 +26,7 @@ private:
   std::string _password;
   ///@brief Список умных указателей на игроков
   // TODO:(tolstoy) а список ли? поменять на более разумное
-  std::list<std::shared_ptr<Player>> _player_pointer_list
+  std::list<std::shared_ptr<Player>> _player_pointer_list;
   ///@brief Указатель на рынок сессии
   std::shared_ptr<Market> _market;
   ///@brief Указатель на состав правил
