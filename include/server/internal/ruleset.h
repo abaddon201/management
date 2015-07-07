@@ -1,4 +1,4 @@
-﻿#ifndef SERVER_INTERNAL_RULESET_H
+#ifndef SERVER_INTERNAL_RULESET_H
 #define SERVER_INTERNAL_RULESET_H
 
 #include <utility>
