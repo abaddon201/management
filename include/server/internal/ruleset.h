@@ -11,9 +11,9 @@ class Ruleset {
   using MarketParam = std::pair<double,int>;
 public:
   Ruleset();
-  Ruleset(int tt, int fc, int rc, int pc, ManufacturingCost mc, int m, int fbt, int sr, int sp, int sfc, int ms,
+  Ruleset(int tt, unsigned mpl, int fc, int rc, int pc, ManufacturingCost mc, int m, int fbt, int sr, int sp, int sfc, int ms,
           std::vector<std::vector<double>> msm, std::vector<MarketParam> mr, std::vector<MarketParam> mp) :
-      _turn_timeout{tt},
+      _turn_timeout{tt}, _max_players{mpl},
       _factory_cost{fc}, _raw_cost{rc}, _product_cost{pc},
       _manufacturing_cost{mc},
       _money{m}, _factory_build_time{fbt}, _startup_raw{sr}, _startup_products{sp}, _startup_factory_count{sfc}, _market_state{ms},
@@ -21,6 +21,8 @@ public:
   ~Ruleset() {};
   ///@brief Ограничение времени на ход в секундах. Если отрицательное - время не ограничено
   int _turn_timeout;
+  ///@brief Максимальное кол-во игроков
+  unsigned _max_players;
   ///@brief Стоимость содержания фабрики
   int _factory_cost;
   ///@brief Стоимость сырья оставшегося на складе
@@ -50,12 +52,12 @@ public:
 };
 
 static const Ruleset DEFAULT_RULESET {
-  -1,
+  -1, 4,
   1000, 300, 500,
   {1, 2000},
   10000, 5,
   4, 2, 2,
-  3,
+  2,
   {{1./3., 1./3., 1./6., 1./12., 1./12.},
    {1./4., 1./3., 1./4., 1./12., 1./12.},
    {1./12., 1./4., 1./3., 1./4., 1./12.},
