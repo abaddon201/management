@@ -11,7 +11,7 @@ bool Session::connectPlayer() {
 }
 
 bool Session::disconnectPlayer(int player_id) {
-  _player_pointer_list.remove_if([player_id](std::shared_ptr<Player> p) {return p->getId() == player_id;});
+  _player_pointer_list.remove_if([player_id](std::shared_ptr<Player> p) {return p->id() == player_id;});
   if (0 == _player_pointer_list.size()) {
     _state = State::FINISHED;
     return true;

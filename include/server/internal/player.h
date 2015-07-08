@@ -23,7 +23,7 @@ public:
 
   Player() {_id = generateSomeUniqueId();}
   ~Player() {}
-  int getId() {return _id;}
+  int id() {return _id;}
   int generateSomeUniqueId() {return std::rand();} ///@fixme: (abby): написать генератор уникального
 private:
   ///@brief Идентификатор игрока
