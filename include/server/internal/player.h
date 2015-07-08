@@ -20,16 +20,17 @@ public:
   using List = std::list<std::shared_ptr<Player>>;
   ///@brief Псевдоним для итератора по списку игроков
   using Iterator = Player::List::iterator;
+  using Id = int;
 
   Player() {_id = generateSomeUniqueId();}
   ~Player() {}
 
-  int id() {return _id;}
-  int generateSomeUniqueId() {return std::rand();} ///@fixme: (abby): написать генератор уникального
+  Id id() {return _id;}
+  Id generateSomeUniqueId() {return std::rand();} ///@fixme: (abby): написать генератор уникального
 
 private:
   ///@brief Идентификатор игрока
-  int _id;
+  Id _id;
   ///@brief Пароль игрока
   std::string _password;
   ///@brief Псевдоним игрока
