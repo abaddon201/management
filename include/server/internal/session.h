@@ -31,11 +31,16 @@ public:
   ///@brief когда все игроки готовы, сессия передает ход рынку и переходит в следующий месяц
   void makeTurn();
 
+  ///@brief возвращает указатель на набор правил
+  std::shared_ptr<Ruleset> ruleset() {return _ruleset;}
+
 private:
   ///@brief Идентификатор сессии
   int _id;
   ///@brief Пароль для доступа к сессии
   std::string _password;
+  ///@brief Указатель на состав правил
+  std::shared_ptr<Ruleset> _ruleset;
   ///@brief Список умных указателей на игроков
   Player::List _player_pointer_list;
   ///@brief Указатель на рынок сессии
