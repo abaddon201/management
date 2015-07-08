@@ -12,12 +12,14 @@ public:
   ///@brief сменить состояние рынка
   void changeState();
   ///@brief геттер состояния рынка
-  int getState();
+  int state();
+  ///@brief возвращает указатель на набор правил
+  std::shared_ptr<Ruleset> ruleset() {return _ruleset;}
 private:
   ///@brief Cостояние рынка. Рынок может занимать один из пяти уровней.
   int _state;
-  ///@brief Указатель на сессию. Именно raw pointer, чтобы не было циклических зависимостей объектов
-  Session* _session;
+  ///@brief Указатель на состав правил
+  std::shared_ptr<Ruleset> _ruleset;
 };
 
 #endif //SERVER_INTERNAL_MARKET_H
