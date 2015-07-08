@@ -19,7 +19,8 @@ HEADERS += \
     include/server/internal/ruleset.h \
     include/server/internal/session.h \
     include/server/internal/storage.h \
-    include/server/internal/server.h
+    include/server/internal/server.h \
+    include/server/internal/bid.h
 
 QMAKE_CXXFLAGS += -std=c++14
 
