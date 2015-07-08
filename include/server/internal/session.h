@@ -46,7 +46,9 @@ private:
   std::shared_ptr<Ruleset> _ruleset;
   ///@brief Состояние сессии
   State _state;
-
+  ///@brief Номер хода
+  int _turn_number;
+  ///@TODO:(tolstoy) что делает эта штука? Добавить описание.
   void doPlayers();
 };
 

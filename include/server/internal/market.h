@@ -11,6 +11,8 @@ public:
   ~Market();
   ///@brief сменить состояние рынка
   void changeState();
+  ///@brief геттер состояния рынка
+  int getState();
 private:
   ///@brief Cостояние рынка. Рынок может занимать один из пяти уровней.
   int _state;
