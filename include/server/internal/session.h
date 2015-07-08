@@ -8,29 +8,27 @@
 #include "ruleset.h"
 
 class Session {
+public:
   ///@brief Состояние в котором сейчас находится сессия
   enum class State {
     WAITING_FOR_PLAYERS,
     PLAYING,
     FINISHED
   };
+
 public:
   Session();
   ~Session();
-
   ///@brief Подключает игрока к сессии
   /// @returns true - если успешно подключен, false - Если нет
   bool connectPlayer();
-
   ///@brief Отсоединение игрока от сессии
   ///
   /// Меняет состояние сессии, в соотв. с тем остались ли игроки или нет.
   /// @returns true - если это был последний игрок, false - если игроки ещё остались
   bool disconnectPlayer(int player_id);
-
   ///@brief когда все игроки готовы, сессия передает ход рынку и переходит в следующий месяц
   void makeTurn();
-
   ///@brief возвращает указатель на набор правил
   std::shared_ptr<Ruleset> ruleset() {return _ruleset;}
 
