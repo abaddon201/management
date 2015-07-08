@@ -5,11 +5,12 @@
 #include <vector>
 
 class Ruleset {
+public:
   using ManufacturingCost = std::pair<int,int>;
   ///@brief Параметр рынка для описания сырья/продукции.
   /// формат: кол-во (коэффициент, на который домножается кол-во необанкротившихся игроков), цена
   using MarketParam = std::pair<double,int>;
-public:
+
   Ruleset();
   Ruleset(int tt, unsigned mpl, int fc, int rc, int pc, ManufacturingCost mc, int m, int fbt, int sr, int sp, int sfc, int ms,
           std::vector<std::vector<double>> msm, std::vector<MarketParam> mr, std::vector<MarketParam> mp) :
@@ -19,6 +20,7 @@ public:
       _money{m}, _factory_build_time{fbt}, _startup_raw{sr}, _startup_products{sp}, _startup_factory_count{sfc}, _market_state{ms},
       _market_state_matrix{msm}, _market_raw{mr}, _market_production{mp} {};
   ~Ruleset() {};
+
   ///@brief Ограничение времени на ход в секундах. Если отрицательное - время не ограничено
   int _turn_timeout;
   ///@brief Максимальное кол-во игроков
@@ -49,30 +51,9 @@ public:
   std::vector<MarketParam> _market_raw;
   ///@brief Таблица лимитов (стоимости) продукции, в зависимости от состояния рынка
   std::vector<MarketParam> _market_production;
-};
 
-static const Ruleset DEFAULT_RULESET {
-  -1, 4,
-  1000, 300, 500,
-  {1, 2000},
-  10000, 5,
-  4, 2, 2,
-  2,
-  {{1./3., 1./3., 1./6., 1./12., 1./12.},
-   {1./4., 1./3., 1./4., 1./12., 1./12.},
-   {1./12., 1./4., 1./3., 1./4., 1./12.},
-   {1./12., 1./12., 1./4., 1./3., 1./4.},
-   {1./12., 1./12., 1./6., 1./3., 1./3.}},
-  {{1., 800},
-   {1.5, 650},
-   {2., 500},
-   {2.5, 400},
-   {3., 300}},
-  {{3., 6500},
-   {2.5, 6000},
-   {2., 5500},
-   {1.5, 5000},
-   {1, 4500}}
+  ///@brief Набор правил поумолчанию
+  static const Ruleset DEFAULT;
 };
 
 #endif //SERVER_INTERNAL_RULESET_H

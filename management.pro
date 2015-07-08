@@ -6,7 +6,8 @@ CONFIG -= qt
 SOURCES += \
     server/main.cpp \
     server/session.cpp \
-    server/market.cpp
+    server/market.cpp \
+    server/ruleset.cpp
 
 include(deployment.pri)
 qtcAddDeployment()

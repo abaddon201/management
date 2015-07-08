@@ -5,6 +5,7 @@ class Factory {
 public:
   Factory() {}
   ~Factory() {}
+
 private:
   ///@brief В каком месяце фабрика будет построена
   int _month_when_done;

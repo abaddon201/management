@@ -9,10 +9,12 @@ class Market {
 public:
   Market(std::shared_ptr<Ruleset> r) : _ruleset(r) {}
   ~Market();
+
   ///@brief сменить состояние рынка
   void changeState();
   ///@brief геттер состояния рынка
   int state();
+
 private:
   ///@brief Cостояние рынка. Рынок может занимать один из пяти уровней.
   int _state;

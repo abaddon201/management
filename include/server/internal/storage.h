@@ -5,6 +5,7 @@ class Storage {
 public:
   Storage() {}
   ~Storage() {}
+
 private:
   ///@brief Хранящаяся на складе не реализованная продукция
   int _production_stored;
