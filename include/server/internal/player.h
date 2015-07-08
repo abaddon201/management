@@ -4,6 +4,7 @@
 #include <utility>
 #include <memory>
 #include <string>
+#include <queue>
 #include <list>
 
 #include "storage.h"
@@ -14,15 +15,16 @@ class Player {
   // TODO: (tolstoy) Вообще стоит создание псевдонима вынести отсюда, поскольку оно будет нужно не только тут
     // THINK: (abby) Зато тип будет красивый Player::Bid ... В общем, я бы не торопился
   using Bid = std::pair<int,int>;
-  using f_iterator = std::list<std::shared_ptr<Factory>>::iterator;
 public:
+  ///@brief Псеводним для типа очереди строящихся фабрик
+  using FactoryQueue = std::queue<std::unique_ptr<Factory>>;
   ///@brief Псевдоним для списка игроков
   using List = std::list<std::shared_ptr<Player>>;
   ///@brief Псевдоним для итератора по списку игроков
   using Iterator = Player::List::iterator;
 
   Player() {_id = generateSomeUniqueId();}
-  ~Player();
+  ~Player() {}
   int getId() {return _id;}
   int generateSomeUniqueId() {return std::rand();} ///@fixme: (abby): написать генератор уникального
 private:
@@ -45,7 +47,7 @@ private:
   ///@brief Количество строящихся фабрик
   int _number_of_factories_under_construction;
   ///@brief Итератор спискa указателей на фабрики, находящиеся в стадии строительства
-  std::list<std::shared_ptr<Factory>> _factory_ptr_queue;
+  FactoryQueue _factory_ptr_queue;
   ///@brief Имеющиеся в распоряжении деньги
   int _cash;
 };
