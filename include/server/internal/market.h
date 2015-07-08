@@ -13,10 +13,10 @@ class Market {
 public:
   using Limit = std::pair<int, int>;
   ///@brief очередь из пар<айдишник игрока, пара<ставка на продажу, ставка на покупку>
-  using BidQueue = std::queue<std::pair<int, std::pair<Player::Bid, Player::Bid>>;
+  using BidQueue = std::queue<std::pair<int, std::pair<Player::Bid, Player::Bid>>>;
   ///@brief контейнер результатов торгов пара<айди, пара<продано материала, куплено продукции>>
   ///@think(tolstoy) подумать нет ли контейнера сильно лучше
-  using ResultContainer = std:queue<std::pair<int, std::pair<int, int>>;
+  using ResultContainer = std::queue<std::pair<int, std::pair<int, int>>>;
 
 public:
   Market() {}
@@ -25,7 +25,7 @@ public:
   void setLimits(Limit raw, Limit production);
   ///@brief обработать заявки на покупку ресурсов и продажу продукции
   ///@think(think) а может принимать rvalue reference и отдавать так же.
-  shared_ptr<ResultContainer> processBids(shared_ptr<BidQueue>);
+  std::shared_ptr<ResultContainer> processBids(std::shared_ptr<BidQueue>);
 private:
   ///@brief лимит продажи материалов
   Limit _raw;
