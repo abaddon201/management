@@ -11,9 +11,9 @@
 #include "factory.h"
 
 class Player {
-  // Bid. Это пара целых чисел, первое из которых это количество единиц, а второе - цена.
-  using Bid = std::pair<int,int>;
 public:
+  ///@brief Это пара целых чисел, первое из которых это количество единиц, а второе - цена.
+  using Bid = std::pair<int,int>;
   ///@brief Псеводним для типа очереди строящихся фабрик
   using FactoryQueue = std::queue<std::unique_ptr<Factory>>;
   ///@brief Псевдоним для списка игроков
@@ -23,8 +23,10 @@ public:
 
   Player() {_id = generateSomeUniqueId();}
   ~Player() {}
+
   int id() {return _id;}
   int generateSomeUniqueId() {return std::rand();} ///@fixme: (abby): написать генератор уникального
+
 private:
   ///@brief Идентификатор игрока
   int _id;
