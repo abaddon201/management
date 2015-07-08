@@ -11,7 +11,3 @@ void Market::changeState() {
     }
   }
 }
-
-void Market::doPlayers(Player::List players) {
-  ///@todo: (abby) : реализовать алгоритм
-}

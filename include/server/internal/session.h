@@ -20,32 +20,18 @@ public:
 
   ///@brief Подключает игрока к сессии
   /// @returns true - если успешно подключен, false - Если нет
-  bool connectPlayer() {
-    if (_state!=State::WAITING_FOR_PLAYERS)
-      return false;
-    if (_player_pointer_list.size() == _ruleset->_max_players) {
-      return false;
-    }
-    _player_pointer_list.push_back(std::shared_ptr<Player>(new Player()));
-    return true;
-  }
+  bool connectPlayer();
   ///@brief Отсоединение игрока от сессии
   ///
   /// Меняет состояние сессии, в соотв. с тем остались ли игроки или нет.
   /// @returns true - если это был последний игрок, false - если игроки ещё остались
-  bool disconnectPlayer(int player_id) {
-    _player_pointer_list.remove_if([player_id](std::shared_ptr<Player> p) {return p->getId() == player_id;});
-    if (0 == _player_pointer_list.size()) {
-      _state = State::FINISHED;
-      return true;
-    }
-    return false;
-  }
+  bool disconnectPlayer(int player_id);
 
   ///@brief когда все игроки готовы, производит рассчёт хода
   void makeTurn();
   ///@brief возвращает указатель на набор правил
   std::shared_ptr<Ruleset> ruleset() {return _ruleset;}
+
 private:
   ///@brief Идентификатор сессии
   int _id;
@@ -61,6 +47,7 @@ private:
   ///@brief Состояние сессии
   State _state;
 
+  void doPlayers();
 };
 
 #endif //SERVER_INTERNAL_SESSION_H

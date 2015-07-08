@@ -11,7 +11,6 @@ public:
   ~Market();
   ///@brief сменить состояние рынка
   void changeState();
-  void doPlayers(Player::List players);
 private:
   ///@brief Cостояние рынка. Рынок может занимать один из пяти уровней.
   int _state;
