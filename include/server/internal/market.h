@@ -7,7 +7,7 @@
 
 #include "player.h"
 
-class Session;
+class Ruleset;
 
 class Market {
 public:
@@ -19,7 +19,7 @@ public:
   using ResultContainer = std:queue<std::pair<int, std::pair<int, int>>;
 
 public:
-  Market() : {}
+  Market(std::shared_ptr<Ruleset> r) : _ruleset(r) {}
   ~Market();
   ///@brief задать лимиты
   void setLimits(Limit raw, Limit production);
@@ -28,11 +28,18 @@ public:
   shared_ptr<ResultContainer> processBids(shared_ptr<BidQueue>);
   
 private:
+<<<<<<< HEAD
   ///@brief лимит продажи материалов
   Limit _raw;
   ///@brief лимит покупки материалов
   Limit _production;
 
+=======
+  ///@brief Cостояние рынка. Рынок может занимать один из пяти уровней.
+  int _state;
+  ///@brief Набор правил, заимствованых у сессии
+  std::shared_ptr<Ruleset> _ruleset;
+>>>>>>> origin/abby_serv
 };
 
 #endif //SERVER_INTERNAL_MARKET_H
