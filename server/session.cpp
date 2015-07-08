@@ -1,12 +1,12 @@
 #include "session.h"
 
-bool Session::connectPlayer() {
+bool Session::connectPlayer(std::string name, std::string pass) {
   if (_state!=State::WAITING_FOR_PLAYERS)
     return false;
   if (_player_pointer_list.size() == _ruleset->_max_players) {
     return false;
   }
-  _player_pointer_list.push_back(std::shared_ptr<Player>(new Player()));
+  _player_pointer_list.push_back(std::shared_ptr<Player>(new Player(name, pass)));
   return true;
 }
 

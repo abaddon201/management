@@ -22,7 +22,7 @@ public:
   using Iterator = Player::List::iterator;
   using Id = int;
 
-  Player() {_id = generateSomeUniqueId();}
+  Player(std::string name, std::string pass) : _nickname{name}, _password{pass} {_id = generateSomeUniqueId();}
   ~Player() {}
 
   Id id() {return _id;}
@@ -31,10 +31,10 @@ public:
 private:
   ///@brief Идентификатор игрока
   Id _id;
-  ///@brief Пароль игрока
-  std::string _password;
   ///@brief Псевдоним игрока
   std::string _nickname;
+  ///@brief Пароль игрока
+  std::string _password;
   ///@brief Завершил ли пользователь свой ход
   bool _if_made_turn;
   ///@brief Ставка игрока на аукцион по покупке материалов
