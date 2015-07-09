@@ -37,17 +37,11 @@ public:
   };
 
 
-  Player(std::shared_ptr<Ruleset> ruleset, std::string name, std::string pass)
-    : _nickname{name}, _password{pass}, _ruleset{ruleset}
-  {
-    _id = generateSomeUniqueId();
-  }
+  Player(std::shared_ptr<Ruleset> ruleset, Player::Id id) : _id{id}, _ruleset{ruleset} {}
   ~Player() {}
 
   ///@brief возвращает идентификатор игрока
   Id id() {return _id;}
-  ///@brief генерирует уникальный на сервере идентификатор игрока
-  Id generateSomeUniqueId() {return std::rand();} ///@fixme: (abby): написать генератор уникального
   ///@brief Обновляет состояние игрока после вычислений на рынке
   void updateState(Bid raw_bid, Bid production_bid);
   ///@brief возвращает состояние игрока
@@ -60,10 +54,6 @@ public:
 private:
   ///@brief Идентификатор игрока
   Id _id;
-  ///@brief Псевдоним игрока
-  std::string _nickname;
-  ///@brief Пароль игрока
-  std::string _password;
   ///@brief Ставка игрока на аукцион по покупке материалов
   Bid _current_buy_raw_bid;
   ///@brief Ставка игрока на аукцион по продаже продукции
@@ -89,6 +79,7 @@ private:
   void manufacture();
   ///@brief производит расплату за склад, фабрики и прочее
   void payBills();
+  ///@brief Производит обработку ставок
   void processBids();
 };
 

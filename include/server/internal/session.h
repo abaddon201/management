@@ -18,10 +18,11 @@ public:
 
 public:
   Session();
+  Session(std::shared_ptr<Ruleset> rules) : _ruleset{rules} {}
   ~Session();
   ///@brief Подключает игрока к сессии
   /// @returns true - если успешно подключен, false - Если нет
-  bool connectPlayer(std::string name, std::string pass);
+  bool connectPlayer(Player::Id id);
   ///@brief Отсоединение игрока от сессии
   ///
   /// Меняет состояние сессии, в соотв. с тем остались ли игроки или нет.
