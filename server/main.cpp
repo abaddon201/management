@@ -10,5 +10,6 @@
 ///
 
 int main() {
-	return 0;
+  Server serv;
+  return 0;
 }
