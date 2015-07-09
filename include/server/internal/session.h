@@ -8,31 +8,53 @@
 #include "ruleset.h"
 
 class Session {
-  ///@brief Псевдоним для итератора по списку игроков 
-  using Pit = std::list<std::shared_ptr<Player>>::iterator;
+public:
   ///@brief Состояние в котором сейчас находится сессия
   enum class State {
     WAITING_FOR_PLAYERS,
     PLAYING,
     FINISHED
   };
+
 public:
   Session();
+  Session(std::shared_ptr<Ruleset> rules) : _ruleset{rules} {}
   ~Session();
+  ///@brief Подключает игрока к сессии
+  /// @returns true - если успешно подключен, false - Если нет
+  bool connectPlayer(Player::Id id);
+  ///@brief Отсоединение игрока от сессии
+  ///
+  /// Меняет состояние сессии, в соотв. с тем остались ли игроки или нет.
+  /// @returns true - если это был последний игрок, false - если игроки ещё остались
+  bool disconnectPlayer(Player::Id player_id);
+  ///@brief Когда все игроки сделали ставки, сессия вызывает обработку хода и переходит в следующий месяц
+  void makeTurn();
+  ///@brief возвращает указатель на набор правил
+  std::shared_ptr<Ruleset> ruleset() {return _ruleset;}
+
 private:
   ///@brief Идентификатор сессии
   int _id;
   ///@brief Пароль для доступа к сессии
   std::string _password;
-  ///@brief Список умных указателей на игроков
-  // TODO:(tolstoy) а список ли? поменять на более разумное
-  std::list<std::shared_ptr<Player>> _player_pointer_list;
-  ///@brief Указатель на рынок сессии
-  std::shared_ptr<Market> _market;
   ///@brief Указатель на состав правил
   std::shared_ptr<Ruleset> _ruleset;
+  ///@brief Список умных указателей на игроков
+  Player::List _player_pointer_list;
+  ///@brief Указатель на рынок сессии
+  std::shared_ptr<Market> _market;
   ///@brief Состояние сессии
   State _state;
+  ///@brief Номер хода
+  int _turn_number;
+
+  ///@brief Возвращает количество активных игроков (не банкротов, и не отключившихся)
+  int getPlayersInGame();
+  ///@brief Создаёт список из текущих сырьевых ставок игроков
+  Market::BidQueue getRawBids();
+  ///@brief Создаёт список из текущих продуктовых ставок игроков
+  Market::BidQueue getProductionBids();
 };
 
 #endif //SERVER_INTERNAL_SESSION_H
