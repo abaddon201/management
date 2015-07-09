@@ -36,14 +36,13 @@ public:
     Player::Id player;
   };
 
-
   Player(std::shared_ptr<Ruleset> ruleset, Player::Id id) : _id{id}, _ruleset{ruleset} {}
   ~Player() {}
 
   ///@brief возвращает идентификатор игрока
   Id id() {return _id;}
   ///@brief Обновляет состояние игрока после вычислений на рынке
-  void updateState(Bid raw_bid, Bid production_bid);
+  void updateState(int turn, Bid raw_bid, Bid production_bid);
   ///@brief возвращает состояние игрока
   State state() {return _state;}
   ///@brief возвращает ставку игрока по материалам
@@ -59,13 +58,11 @@ private:
   ///@brief Ставка игрока на аукцион по продаже продукции
   Bid _current_sell_production_bid;
   ///@brief Склад продукции и материалов
-  Storage _storage_room;
+  Storage _storage;
   ///@brief Количество функционирующих фабрик
   int _number_of_working_factories;
-  ///@brief Количество строящихся фабрик
-  int _number_of_factories_under_construction;
   ///@brief Итератор спискa указателей на фабрики, находящиеся в стадии строительства
-  FactoryQueue _factory_ptr_queue;
+  FactoryQueue _factories_to_build;
   ///@brief Имеющиеся в распоряжении деньги
   int _cash;
   ///@brief Ссылка на правила
@@ -74,7 +71,7 @@ private:
   State _state;
 
   ///@brief производит строительство фабрик
-  void buildFactories();
+  void buildFactories(int turn);
   ///@brief производит материалы из сырья
   void manufacture();
   ///@brief производит расплату за склад, фабрики и прочее
