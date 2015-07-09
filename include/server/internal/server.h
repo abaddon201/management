@@ -4,6 +4,8 @@
 #include <list>
 #include <memory>
 
+#include "session.h"
+
 class Server {
 public:
   enum class JsonMessageStates {

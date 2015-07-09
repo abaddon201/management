@@ -2,6 +2,9 @@
 
 #include <algorithm>
 
+Session::~Session() {
+}
+
 bool Session::connectPlayer(Player::Id id) {
   if (_state!=State::WAITING_FOR_PLAYERS)
     return false;

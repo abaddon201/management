@@ -1,5 +1,6 @@
 TEMPLATE = app
 CONFIG += console
+CONFIG += c++14
 CONFIG -= app_bundle
 CONFIG -= qt
 
@@ -79,6 +80,7 @@ HEADERS += \
     include/server/rapidjson/stringbuffer.h \
     include/server/rapidjson/writer.h
 
-QMAKE_CXXFLAGS += -std=c++14
 
-INCLUDEPATH+= include/server/internal
+QMAKE_CXXFLAGS += -std=c++14 -stdlib=libc++
+
+INCLUDEPATH+= include/server/
