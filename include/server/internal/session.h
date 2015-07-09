@@ -48,8 +48,12 @@ private:
   ///@brief Номер хода
   int _turn_number;
 
-  ///@brief Обработать ход игроков
-  void doPlayers();
+  ///@brief Возвращает количество активных игроков (не банкротов, и не отключившихся)
+  int getPlayersInGame();
+  ///@brief Создаёт список из текущих сырьевых ставок игроков
+  Market::BidQueue getRawBids();
+  ///@brief Создаёт список из текущих продуктовых ставок игроков
+  Market::BidQueue getProductionBids();
 };
 
 #endif //SERVER_INTERNAL_SESSION_H

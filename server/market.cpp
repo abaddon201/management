@@ -1,6 +1,11 @@
 #include "market.h"
 #include "session.h"
 
+void Market::makeTurn(int players_in_game, BidQueue& raw_bids, BidQueue& production_bids) {
+  processBids(players_in_game, raw_bids, production_bids);
+  changeState();
+}
+
 void Market::changeState() {
   int pos = 0;
   for(double v:_ruleset->_market_state_matrix.at(_state)) {
@@ -10,4 +15,8 @@ void Market::changeState() {
       return;
     }
   }
+}
+
+void Market::processBids(int players_in_game, BidQueue &raw_bids, BidQueue &production_bids) {
+  ///@todo (abby): не реализовно нихрена
 }
