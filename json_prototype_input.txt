@@ -1,6 +1,16 @@
+  enum Actions {
+    REGISTER_USER ,
+    DELETE_USER,
+    CREATE_SESSION,
+    CONNECT_SESSION,
+    MAKE_TURN,
+    DISCONNECT_SESSION,
+    LIST_SESSIONS
+  };
+
 // Регистрация пользователя
 {
-  "action": "register_user",
+  "action": 1,
   "data": {
     "login": "test_login",
     "password": "test_password"
@@ -9,7 +19,7 @@
 
 // Удаление пользователя из базы
 {
-  "action": "delete_user",
+  "action": 2,
   "data": {
     "login": "test_login",
     "password": "test_password"
@@ -18,7 +28,7 @@
 
 // Создание новой сессии зарегестрированным пользователем с заданием пароля
 {
-  "action": "create_session",
+  "action": 3,
   "data": {
     "login": "test_login",
     "password": "test_password"
@@ -28,7 +38,7 @@
 
 // Присоединение зарегестрированного пользователя к существующей сессии, имеющей некий пароль
 {
-  "action": "connect_session",
+  "action": 4,
   "data": {
     "login": "test_login",
     "password": "test_password"
@@ -39,7 +49,7 @@
 
 // Передача информации о ходе для сессии с айди, игроком с айди, 
 {
-  "action": "make_turn",
+  "action": 5,
   "data": {
     "session_id": 123456789,
     "player_id": 1234567810,
@@ -60,7 +70,7 @@
 
 // Отсоединение игрока с айди от сессии с айди
 {
-  "action": "disconnect_session",
+  "action": 6,
   "data": {
     "player_id": 1234567810,
     "session_id": 123456789,
@@ -69,7 +79,7 @@
 
 // Показ зарегистрированному игроку списка открытых сессий
 {
-  "action": "list_sessions",
+  "action": 7,
   "data": {
     "login": "test_login",
     "password": "test_password"

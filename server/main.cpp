@@ -7,9 +7,13 @@
 #include "internal/session.h"
 #include "internal/storage.h"
 #include "internal/server.h"
+
+#include "rapidjson/stringbuffer.h"
+#include "rapidjson/writer.h"
 ///
 
 int main() {
   Server serv;
+
   return 0;
 }
