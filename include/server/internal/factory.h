@@ -2,7 +2,7 @@
 #define SERVER_INTERNAL_FACTORY_H
 
 struct Factory {
-  Factory() {}
+  Factory(int turn): month_when_done{turn} {}
   ~Factory() {}
 
   ///@brief В каком месяце фабрика будет построена

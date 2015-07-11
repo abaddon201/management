@@ -17,7 +17,7 @@ void Player::updateState(int turn, Bid raw_bid, Bid production_bid) {
 void Player::orderFactories(int turn) {
   _cash -= _building_planned * (_ruleset->factory_build_cost / 2);
   for (int i = 0; i < _building_planned; ++i) {
-      _factories_to_build.push(std::make_unique<Factory>(new Factory(turn)));
+      _factories_to_build.push(std::make_unique<Factory>(turn + _ruleset->factory_build_time));
   }
 }
 
