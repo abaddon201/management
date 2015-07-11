@@ -1,12 +1,12 @@
 
 ///@fixme(abby) just for test
-#include "factory.h"
-#include "market.h"
-#include "player.h"
-#include "ruleset.h"
-#include "session.h"
-#include "storage.h"
-#include "server.h"
+#include "internal/factory.h"
+#include "internal/market.h"
+#include "internal/player.h"
+#include "internal/ruleset.h"
+#include "internal/session.h"
+#include "internal/storage.h"
+#include "internal/server.h"
 ///
 
 int main() {

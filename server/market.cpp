@@ -1,8 +1,8 @@
-#include "market.h"
-#include "session.h"
 #include <cstdlib>
-
 #include <algorithm>
+#include "internal/session.h"
+#include "internal/market.h"
+
 
 void Market::makeTurn(int players_in_game, BidQueue& raw_bids, BidQueue& production_bids) {
   processBids(players_in_game, raw_bids, production_bids);

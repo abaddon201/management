@@ -1,6 +1,6 @@
 #include <vector>
 
-#include "server.h"
+#include "internal/server.h"
 
 std::vector<std::string> const actions {
   "register_user" ,

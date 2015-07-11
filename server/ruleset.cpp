@@ -1,4 +1,4 @@
-#include "ruleset.h"
+#include "internal/ruleset.h"
 
 const Ruleset Ruleset::DEFAULT {
   -1, 4,

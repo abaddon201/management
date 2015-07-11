@@ -7,7 +7,7 @@
 
 #include "player.h"
 
-class Ruleset;
+struct Ruleset;
 
 class Market {
 public:
