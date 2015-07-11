@@ -1,0 +1,77 @@
+// Регистрация пользователя
+{
+  "action": "register_user",
+  "data": {
+    "login": "test_login",
+    "password": "test_password"
+  }
+}
+
+// Удаление пользователя из базы
+{
+  "action": "delete_user",
+  "data": {
+    "login": "test_login",
+    "password": "test_password"
+  }
+}
+
+// Создание новой сессии зарегестрированным пользователем с заданием пароля
+{
+  "action": "create_session",
+  "data": {
+    "login": "test_login",
+    "password": "test_password"
+    "password": "test_password_i_want"
+  }
+}
+
+// Присоединение зарегестрированного пользователя к существующей сессии, имеющей некий пароль
+{
+  "action": "connect_session",
+  "data": {
+    "login": "test_login",
+    "password": "test_password"
+    "session_id": 123456789,
+    "password": "test_password_of_session"
+  }
+}
+
+// Передача информации о ходе для сессии с айди, игроком с айди, 
+{
+  "action": "make_turn",
+  "data": {
+    "session_id": 123456789,
+    "player_id": 1234567810,
+    "turn_data": {
+      "build_orders": 1,
+      "production_orders": 2,
+      "buy_raw_bid": {
+        "cost": 123,
+        "quantity": 3
+      }
+      "sell_production_bid": {
+        "cost": 123,
+        "quantity": 3
+      }
+    }
+  }
+}
+
+// Отсоединение игрока с айди от сессии с айди
+{
+  "action": "disconnect_session",
+  "data": {
+    "player_id": 1234567810,
+    "session_id": 123456789,
+  }
+}
+
+// Показ зарегистрированному игроку списка открытых сессий
+{
+  "action": "list_sessions",
+  "data": {
+    "login": "test_login",
+    "password": "test_password"
+  }
+}
