@@ -32,7 +32,7 @@
   "data": {
     "login": "test_login",
     "password": "test_password"
-    "password": "test_password_i_want"
+    "session_password": "test_password_i_want"
   }
 }
 
@@ -43,7 +43,7 @@
     "login": "test_login",
     "password": "test_password"
     "session_id": 123456789,
-    "password": "test_password_of_session"
+    "session_password": "test_password_of_session"
   }
 }
 
@@ -52,6 +52,7 @@
   "action": 5,
   "data": {
     "session_id": 123456789,
+    "session_password"
     "player_id": 1234567810,
     "turn_data": {
       "build_orders": 1,

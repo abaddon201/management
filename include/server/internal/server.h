@@ -15,7 +15,8 @@ public:
   enum class JsonMessageStates {
     SUCCESSFULY_PARSED,
     UNNOWN_ACTION,
-    BAD_ARGS
+    BAD_ARGS,
+    ACTION_DENIED
   };
   ///@brief Варинты действий требуемых клиентами
   enum Actions {
@@ -45,24 +46,31 @@ private:
   ///@brief Список сессий
   std::list<std::unique_ptr<Session>> _sessions;
 
-public:
   ///@brief Распаршиваем полученное сообщение
-  JsonMessageStates processMessage(const std::string& msg);
-private:
+  JsonMessageStates processMessage(const std::string &msg);
   ///@brief Регистрируем пользователя
-  JsonMessageStates registerUser(const rapidjson::Document& doc);
+  JsonMessageStates registerUserHandler(const rapidjson::Document &doc);
   ///@brief Удаляем пользователя
-  JsonMessageStates deleteUser(const rapidjson::Document& doc);
+  JsonMessageStates deleteUserHandler(const rapidjson::Document &doc);
   ///@brief Создаем сессию
-  JsonMessageStates createNewSession(const rapidjson::Document& doc);
+  JsonMessageStates createNewSessionHandler(const rapidjson::Document &doc);
   ///@brief Присоединяем пользователя к сессии
-  JsonMessageStates connectSession(const rapidjson::Document& doc);
+  JsonMessageStates connectSessionHandler(const rapidjson::Document &doc);
   ///@brief Передаем ход в сессию
-  JsonMessageStates giveTurnInSession(const rapidjson::Document& doc);
+  JsonMessageStates giveTurnInSessionHandler(const rapidjson::Document &doc);
   ///@brief Отсоединяем пользователя от сессии
-  JsonMessageStates disconnectSession(const rapidjson::Document& doc);
+  JsonMessageStates disconnectSessionHandler(const rapidjson::Document &doc);
   ///@brief Собираем список сессий
-  JsonMessageStates listSessions(const rapidjson::Document& doc);
+  JsonMessageStates listSessionsHandler(const rapidjson::Document &doc);
+  ///@brief Выдает айди игрока
+  ///@returns Айди игрока в виде целого числа, чтобы знаний о внутренней логике не давать серверу
+  ///
+  ///@param player_login Логин игрока
+  ///@param player_password Пароль игрока
+  int retrievePlayerId(const char *player_login, const char *player_password);
+  ///@brief Выдает айди сессии
+  ///@returns Айди сессии в виде целого числа, чтобы знаний о внутренней логике не давать серверу
+  int retrieveSessionId();
 };
 
 #endif // SERVER_H

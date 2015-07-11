@@ -39,8 +39,10 @@ public:
   Player(std::shared_ptr<Ruleset> ruleset, Player::Id id) : _id{id}, _ruleset{ruleset} {}
   ~Player() {}
 
-  ///@brief возвращает идентификатор игрока
+  ///@brief Возвращает идентификатор игрока
   Id id() {return _id;}
+  ///@brief Устанавливает идентификатор игрока
+  void setId(int id) { _id = id;}
   ///@brief Обновляет состояние игрока после вычислений на рынке
   void updateState(int turn, Bid raw_bid, Bid production_bid);
   ///@brief возвращает состояние игрока
