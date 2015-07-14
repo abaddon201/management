@@ -1,14 +1,25 @@
-#include "session.h"
-
 #include <algorithm>
 
-bool Session::connectPlayer(Player::Id id) {
+#include "internal/session.h"
+
+Session::Session(int id): Session(id, std::make_shared<Ruleset>(Ruleset::DEFAULT), std::string("")) {}
+
+Session::Session(int id, std::shared_ptr<Ruleset> rules): Session(id, rules, std::string(""))  {}
+
+Session::Session(int id, std::string passwd): Session(id, std::make_shared<Ruleset>(Ruleset::DEFAULT), passwd) {}
+
+Session::Session(int id, std::shared_ptr<Ruleset> rules, std::string passwd): _id{id}, _ruleset{rules}, _password{passwd} {}
+
+Session::~Session() {
+}
+
+bool Session::connectPlayer(int id) {
   if (_state!=State::WAITING_FOR_PLAYERS)
     return false;
-  if (_player_pointer_list.size() == _ruleset->_max_players) {
+  if (_player_pointer_list.size() == _ruleset->max_players) {
     return false;
   }
-  _player_pointer_list.push_back(std::shared_ptr<Player>(new Player(_ruleset, id)));
+  _player_pointer_list.push_back(std::shared_ptr<Player>(new Player(_ruleset, static_cast<Player::Id>(id))));
   return true;
 }
 
@@ -31,7 +42,7 @@ void Session::makeTurn() {
     Market::BidQueue::const_iterator raw = std::find_if(raw_bids.cbegin(), raw_bids.cend(), [id] (const Player::Bid& bid) {return bid.player == id;});
     Market::BidQueue::const_iterator prod = std::find_if(production_bids.cbegin(), production_bids.cend(), [id] (const Player::Bid& bid) {return bid.player == id;});
 
-    p->updateState(*raw, *prod);
+    p->updateState(_turn_number, *raw, *prod);
   }
 }
 

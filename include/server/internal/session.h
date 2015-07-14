@@ -17,12 +17,18 @@ public:
   };
 
 public:
-  Session();
-  Session(std::shared_ptr<Ruleset> rules) : _ruleset{rules} {}
+  Session(int id);
+  Session(int id, std::shared_ptr<Ruleset> rules);
+  Session(int id, std::string passwd);
+  Session(int id,std::shared_ptr<Ruleset> rules, std::string passwd);
   ~Session();
+  ///@brief Возвращает айди сессии
+  int id() {return _id;}
+  ///@brief Возвращает пароль сессии
+  std::string password() {return _password;}
   ///@brief Подключает игрока к сессии
   /// @returns true - если успешно подключен, false - Если нет
-  bool connectPlayer(Player::Id id);
+  bool connectPlayer(int id);
   ///@brief Отсоединение игрока от сессии
   ///
   /// Меняет состояние сессии, в соотв. с тем остались ли игроки или нет.

@@ -36,14 +36,15 @@ public:
     Player::Id player;
   };
 
-
   Player(std::shared_ptr<Ruleset> ruleset, Player::Id id) : _id{id}, _ruleset{ruleset} {}
   ~Player() {}
 
-  ///@brief возвращает идентификатор игрока
+  ///@brief Возвращает идентификатор игрока
   Id id() {return _id;}
+  ///@brief Устанавливает идентификатор игрока
+  void setId(int id) { _id = id;}
   ///@brief Обновляет состояние игрока после вычислений на рынке
-  void updateState(Bid raw_bid, Bid production_bid);
+  void updateState(int turn, Bid raw_bid, Bid production_bid);
   ///@brief возвращает состояние игрока
   State state() {return _state;}
   ///@brief возвращает ставку игрока по материалам
@@ -54,18 +55,20 @@ public:
 private:
   ///@brief Идентификатор игрока
   Id _id;
+  ///@brief Количество продукции, которое запланировал произвести игрок
+  int _production_planned;
+  ///@brief Сколько фабрик запланировал построить игрок
+  int _building_planned;
   ///@brief Ставка игрока на аукцион по покупке материалов
   Bid _current_buy_raw_bid;
   ///@brief Ставка игрока на аукцион по продаже продукции
   Bid _current_sell_production_bid;
   ///@brief Склад продукции и материалов
-  Storage _storage_room;
+  Storage _storage;
   ///@brief Количество функционирующих фабрик
   int _number_of_working_factories;
-  ///@brief Количество строящихся фабрик
-  int _number_of_factories_under_construction;
   ///@brief Итератор спискa указателей на фабрики, находящиеся в стадии строительства
-  FactoryQueue _factory_ptr_queue;
+  FactoryQueue _factories_to_build;
   ///@brief Имеющиеся в распоряжении деньги
   int _cash;
   ///@brief Ссылка на правила
@@ -73,11 +76,14 @@ private:
   ///@brief Состояние игрока
   State _state;
 
-  ///@brief производит строительство фабрик
-  void buildFactories();
-  ///@brief производит материалы из сырья
+  ///@brief Заказ новых фабрик
+  void orderFactories(int turn);
+  ///@brief Производит строительство фабрик
+  void buildFactories(int turn);
+  ///@brief Производит материалы из сырья
+  ///@param amount Количество продукции, которое хочет произвести игрок.
   void manufacture();
-  ///@brief производит расплату за склад, фабрики и прочее
+  ///@brief Производит расплату за склад, фабрики и прочее
   void payBills();
   ///@brief Производит обработку ставок
   void processBids();
