@@ -27,6 +27,20 @@ void Market::processBids(int players_in_game, BidQueue &raw_bids, BidQueue &prod
   int max_sell_quantity = _ruleset->market_raw.at(_state).first * players_in_game;
   int min_sell_cost = _ruleset->market_raw.at(_state).second;
 
-  raw_bids.sort([](const Player::Bid& a, const Player::Bid& b) {return b.requested_cost < a.requested_cost;});
-  production_bids.sort([](const Player::Bid& a, const Player::Bid& b) {return b.requested_cost > a.requested_cost;});
+  int total_raw_bids = 0;
+  std::for_each(raw_bids.begin(), raw_bids.end(), [&total_raw_bids](Player::Bid& a) {total_raw_bids+=a.requested_quantity;});
+  int total_prod_bids = 0;
+  std::for_each(production_bids.begin(), production_bids.end(), [&total_prod_bids](Player::Bid& a) {total_prod_bids+=a.requested_quantity;});
+  if (total_raw_bids<max_sell_quantity) {
+    // Можем удовлетворить все запросы
+    std::for_each(raw_bids.begin(), raw_bids.end(), [](Player::Bid& a) {a.accepted_quantity = a.requested_quantity;});
+  } else {
+    raw_bids.sort([](const Player::Bid& a, const Player::Bid& b) {return b.requested_cost < a.requested_cost;});
+  }
+  if (total_prod_bids<max_buy_quantity) {
+    // Можем удовлетворить все запросы
+    std::for_each(production_bids.begin(), production_bids.end(), [](Player::Bid& a) {a.accepted_quantity = a.requested_quantity;});
+  } else {
+    production_bids.sort([](const Player::Bid& a, const Player::Bid& b) {return b.requested_cost > a.requested_cost;});
+  }
 }
