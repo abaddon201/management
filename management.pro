@@ -81,6 +81,10 @@ HEADERS += \
     include/server/rapidjson/writer.h
 
 
-QMAKE_CXXFLAGS += -std=c++14 -stdlib=libc++
+QMAKE_CXXFLAGS += -std=c++14
+
+macx {
+QMAKE_CXXFLAGS += -stdlib=libc++
+}
 
 INCLUDEPATH+= include/server/
