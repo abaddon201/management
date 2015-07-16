@@ -4,7 +4,7 @@
 #include "internal/market.h"
 
 
-void Market::makeTurn(int players_in_game, BidQueue& raw_bids, BidQueue& production_bids) {
+void Market::makeTurn(int players_in_game, BidList& raw_bids, BidList& production_bids) {
   processBids(players_in_game, raw_bids, production_bids);
   changeState();
 }
@@ -20,7 +20,7 @@ void Market::changeState() {
   }
 }
 
-void Market::processBids(int players_in_game, BidQueue &raw_bids, BidQueue &production_bids) {
+void Market::processBids(int players_in_game, BidList &raw_bids, BidList &production_bids) {
   ///@todo (abby): не реализовно нихрена
   int max_buy_quantity = _ruleset->market_production.at(_state).first * players_in_game;
   int max_buy_cost = _ruleset->market_production.at(_state).second;

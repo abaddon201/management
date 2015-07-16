@@ -13,7 +13,7 @@ class Market {
 public:
   using Limit = std::pair<int, int>;
   ///@brief очередь из пар<айдишник игрока, пара<ставка на продажу, ставка на покупку>
-  using BidQueue = std::list<Player::Bid>;
+  using BidList = std::list<Player::Bid>;
 
 public:
   Market(std::shared_ptr<Ruleset> r) : _ruleset{r} {}
@@ -23,7 +23,7 @@ public:
   /// @param players_in_game Количество игроков, которые ещё не разорились
   /// @param raw_bids Ставки игроков на закупку материалов
   /// @param production_bids Ставки игроков на продажу товаров
-  void makeTurn(int players_in_game, BidQueue& raw_bids, BidQueue& production_bids);
+  void makeTurn(int players_in_game, BidList& raw_bids, BidList& production_bids);
 
 private:
   ///@brief текущее состояние рынка
@@ -37,7 +37,7 @@ private:
   /// @param players_in_game Количество игроков, которые ещё не разорились
   /// @param raw_bids Ставки игроков на закупку материалов
   /// @param production_bids Ставки игроков на продажу товаров
-  void processBids(int players_in_game, BidQueue& raw_bids, BidQueue& production_bids);
+  void processBids(int players_in_game, BidList& raw_bids, BidList& production_bids);
 };
 
 #endif //SERVER_INTERNAL_MARKET_H

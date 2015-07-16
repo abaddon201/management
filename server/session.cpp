@@ -33,14 +33,14 @@ bool Session::disconnectPlayer(Player::Id player_id) {
 }
 
 void Session::makeTurn() {
-  Market::BidQueue raw_bids = getRawBids();
-  Market::BidQueue production_bids = getProductionBids();
+  Market::BidList raw_bids = getRawBids();
+  Market::BidList production_bids = getProductionBids();
 
   _market->makeTurn(getPlayersInGame(), raw_bids, production_bids);
   for(auto p: _player_pointer_list) {
     Player::Id id = p->id();
-    Market::BidQueue::const_iterator raw = std::find_if(raw_bids.cbegin(), raw_bids.cend(), [id] (const Player::Bid& bid) {return bid.player == id;});
-    Market::BidQueue::const_iterator prod = std::find_if(production_bids.cbegin(), production_bids.cend(), [id] (const Player::Bid& bid) {return bid.player == id;});
+    Market::BidList::const_iterator raw = std::find_if(raw_bids.cbegin(), raw_bids.cend(), [id] (const Player::Bid& bid) {return bid.player == id;});
+    Market::BidList::const_iterator prod = std::find_if(production_bids.cbegin(), production_bids.cend(), [id] (const Player::Bid& bid) {return bid.player == id;});
 
     p->updateState(_turn_number, *raw, *prod);
   }
@@ -50,8 +50,8 @@ int Session::getPlayersInGame() {
   return std::count_if(_player_pointer_list.begin(), _player_pointer_list.end(), [](std::shared_ptr<Player> p) { return (p->state()!=Player::State::BANKRUPT) && (p->state()!=Player::State::LOST);});
 }
 
-Market::BidQueue Session::getRawBids() {
-  Market::BidQueue raws;
+Market::BidList Session::getRawBids() {
+  Market::BidList raws;
   for(auto p: _player_pointer_list) {
     if (p->state() == Player::State::READY) {
       raws.push_back(p->rawBid());
@@ -60,8 +60,8 @@ Market::BidQueue Session::getRawBids() {
   return raws;
 }
 
-Market::BidQueue Session::getProductionBids() {
-  Market::BidQueue prods;
+Market::BidList Session::getProductionBids() {
+  Market::BidList prods;
   for(auto p: _player_pointer_list) {
     if (p->state() == Player::State::READY) {
       prods.push_back(p->productionBid());
