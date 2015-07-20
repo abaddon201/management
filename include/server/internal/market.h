@@ -13,7 +13,7 @@ class Market {
 public:
   using Limit = std::pair<int, int>;
   ///@brief очередь из пар<айдишник игрока, пара<ставка на продажу, ставка на покупку>
-  using BidList = std::list<Player::Bid>;
+  using BidList = std::vector<Player::Bid>;
 
 public:
   Market(std::shared_ptr<Ruleset> r) : _ruleset{r} {}
@@ -38,6 +38,9 @@ private:
   /// @param raw_bids Ставки игроков на закупку материалов
   /// @param production_bids Ставки игроков на продажу товаров
   void processBids(int players_in_game, BidList& raw_bids, BidList& production_bids);
+  ///@brief Перетасовывает случайным образом блоки ставок с одинаковой ценой
+  /// @param @bids список ставок (должен быть отсортирован по цене ставки
+  void randomizeBids(BidList& bids);
 };
 
 #endif //SERVER_INTERNAL_MARKET_H
