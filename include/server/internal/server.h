@@ -1,6 +1,8 @@
 #ifndef SERVER_INTERNAL_SERVER_H
 #define SERVER_INTERNAL_SERVER_H
 
+#include <sys/select.h>
+
 #include <memory>
 #include <list>
 #include <functional>
@@ -32,17 +34,25 @@ public:
 
 public:
   ///@brief Конструктор
-  Server();
+  Server(int port_num);
   ///@brief Деструктор
   ~Server();
   ///@brief Создать новую сессию
   void createSession();
+  ///@brief Стартовать сервер
+  int start();
 
 private:
   ///@brief Вектор обработчиков действий требуемых клиентом
   std::vector<std::function<JsonMessageStates(const rapidjson::Document& doc)>> _message_reactions_vec;
   ///@brief Сокет на котором биндимся
   int _socket;
+  ///@brief Номер порта на котором висим
+  int _port_num;
+  ///@brief Сет сокетов для просмотра селектом
+  fd_set _socket_set;
+  ///@brief Вектор текущих дескрипторов соединений
+  std::vector<int> _connections_vec;
   ///@brief Список сессий
   std::list<std::unique_ptr<Session>> _sessions;
 
@@ -62,6 +72,14 @@ private:
   JsonMessageStates disconnectSessionHandler(const rapidjson::Document &doc);
   ///@brief Собираем список сессий
   JsonMessageStates listSessionsHandler(const rapidjson::Document &doc);
+  ///@brief Начинаем слушать на сокете и обрабатывать соединения входящие
+  int work();
+  ///@brief Готовимся к вызову select
+  void buildSocketSet();
+  ///@brief Подключаем новое соединение
+  int acceptNewConnection();
+  ///@brief Обрабатываем пришедшие соединения
+  int processConnections();
   ///@brief Выдает айди игрока
   ///@returns Айди игрока в виде целого числа, чтобы знаний о внутренней логике не давать серверу
   ///
@@ -71,6 +89,7 @@ private:
   ///@brief Выдает айди сессии
   ///@returns Айди сессии в виде целого числа, чтобы знаний о внутренней логике не давать серверу
   int retrieveSessionId();
+
 };
 
 #endif // SERVER_H
