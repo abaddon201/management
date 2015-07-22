@@ -12,6 +12,20 @@ TEST(Market, DefaultState) {
   //
   // </TechnicalDetails>
   EXPECT_EQ(Ruleset::DEFAULT.market_state, s._state);
+
+  // Проверить, что состояние меняется в соотв. с таблицей вероятностей
+  //
+  // <TechnicalDetails>
+  //
+  // </TechnicalDetails>
+  int states[6]={};
+#define NUM_TESTS 10000
+  for (int i=0;i<NUM_TESTS;++i) {
+    s._state=0;
+    s.changeState();
+    states[s._state]++;
+  }
+  EXPECT_GE(NUM_TESTS*r->market_state_matrix[0][0], states[0])<<"States are="<<states[0]<<","<<states[1]<<","<<states[2]<<","<<states[3]<<","<<states[4]<<","<<states[5];
 }
 /*
 const char kHelloString[] = "Hello, world!";

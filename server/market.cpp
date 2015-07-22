@@ -1,5 +1,7 @@
 #include <cstdlib>
 #include <algorithm>
+#include <iostream>
+
 #include "internal/session.h"
 #include "internal/market.h"
 
