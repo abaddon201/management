@@ -1,36 +1,17 @@
-#include "market.h"
 #include "gtest/gtest.h"
+#include "market.h"
 
-// In this example, we test the MyString class (a simple string).
-
-// Tests the default c'tor.
-TEST(Market, SomeShit) {
+// Tests the market state.
+TEST(Market, DefaultState) {
   Ruleset * r = new Ruleset(Ruleset::DEFAULT);
-  Market s(std::shared_ptr<Ruleset>(r));
+  Market s={std::shared_ptr<Ruleset>(r)};
 
-  // Asserts that s.c_string() returns NULL.
+  // check state is Ruleset::DEFAULT.market_state
   //
   // <TechnicalDetails>
   //
-  // If we write NULL instead of
-  //
-  //   static_cast<const char *>(NULL)
-  //
-  // in this assertion, it will generate a warning on gcc 3.4.  The
-  // reason is that EXPECT_EQ needs to know the types of its
-  // arguments in order to print them when it fails.  Since NULL is
-  // #defined as 0, the compiler will use the formatter function for
-  // int to print it.  However, gcc thinks that NULL should be used as
-  // a pointer, not an int, and therefore complains.
-  //
-  // The root of the problem is C++'s lack of distinction between the
-  // integer number 0 and the null pointer constant.  Unfortunately,
-  // we have to live with this fact.
-  //
   // </TechnicalDetails>
-/*  EXPECT_STREQ(NULL, s.c_string());
-
-  EXPECT_EQ(0u, s.Length());*/
+  EXPECT_EQ(Ruleset::DEFAULT.market_state, s._state);
 }
 /*
 const char kHelloString[] = "Hello, world!";
