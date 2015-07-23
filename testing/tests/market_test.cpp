@@ -19,13 +19,14 @@ TEST(Market, DefaultState) {
   //
   // </TechnicalDetails>
   int states[6]={};
-#define NUM_TESTS 10000
+#define NUM_TESTS 1000000
+#define STATE_TOLERANCE 0.1
   for (int i=0;i<NUM_TESTS;++i) {
     s._state=0;
     s.changeState();
     states[s._state]++;
   }
-  EXPECT_GE(NUM_TESTS*r->market_state_matrix[0][0], states[0])<<"States are="<<states[0]<<","<<states[1]<<","<<states[2]<<","<<states[3]<<","<<states[4]<<","<<states[5];
+  EXPECT_GE(NUM_TESTS*(r->market_state_matrix[0][0]+STATE_TOLERANCE), states[0])<<"States are="<<states[0]<<","<<states[1]<<","<<states[2]<<","<<states[3]<<","<<states[4]<<","<<states[5];
 }
 /*
 const char kHelloString[] = "Hello, world!";

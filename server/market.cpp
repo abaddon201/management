@@ -13,12 +13,21 @@ void Market::makeTurn(int players_in_game, BidList& raw_bids, BidList& productio
 
 void Market::changeState() {
   int pos = 0;
+  double sum = 0;
+
   for(double v:_ruleset->market_state_matrix.at(_state)) {
-    double rnd = (double)std::rand()/(double)RAND_MAX;
-    if (rnd<v) {
+    sum += v;
+  }
+
+  double rnd = sum*(double)std::rand()/(double)RAND_MAX;
+  sum = 0;
+  for(double v:_ruleset->market_state_matrix.at(_state)) {
+    sum+=v;
+    if (rnd<=sum) {
       _state = pos;
       return;
     }
+    pos++;
   }
 }
 
