@@ -47,6 +47,7 @@ private:
   void randomizeBids(BidList& bids);
 #ifdef GTEST_INCLUDE_GTEST_GTEST_H_
   FRIEND_TEST(Market, DefaultState);
+  FRIEND_TEST(Market, ProcessBids);
 #endif
 };
 

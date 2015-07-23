@@ -28,38 +28,74 @@ TEST(Market, DefaultState) {
   }
   EXPECT_GE(NUM_TESTS*(r->market_state_matrix[0][0]+STATE_TOLERANCE), states[0])<<"States are="<<states[0]<<","<<states[1]<<","<<states[2]<<","<<states[3]<<","<<states[4]<<","<<states[5];
 }
-/*
-const char kHelloString[] = "Hello, world!";
 
-// Tests the c'tor that accepts a C string.
-TEST(MyString, ConstructorFromCString) {
-  const MyString s(kHelloString);
-  EXPECT_EQ(0, strcmp(s.c_string(), kHelloString));
-  EXPECT_EQ(sizeof(kHelloString)/sizeof(kHelloString[0]) - 1,
-            s.Length());
+TEST(Market, ProcessBids) {
+  Ruleset * r = new Ruleset(Ruleset::DEFAULT);
+  Market s={std::shared_ptr<Ruleset>(r)};
+
+  // Проверить, что одинаковые ставки обрабатываются правильно при достаточных кол-вах
+  //
+  // <TechnicalDetails>
+  //
+  // </TechnicalDetails>
+  Player::Bid bid;
+  Market::BidList allequal_raw_bids;
+  for(int i=0;i<4;i++) {
+    bid.player=(i+1)*10;
+    bid.accepted_quantity=0;
+    bid.requested_cost=1000;
+    bid.requested_quantity=1;
+    allequal_raw_bids.push_back(bid);
+  }
+  Market::BidList allequal_production_bids;
+  for(int i=0;i<4;i++) {
+    bid.player=(i+1)*10;
+    bid.accepted_quantity=0;
+    bid.requested_cost=1000;
+    bid.requested_quantity=1;
+    allequal_production_bids.push_back(bid);
+  }
+  s.processBids(4, allequal_raw_bids, allequal_production_bids);
+  for (int i=0;i<4;i++) {
+    EXPECT_EQ(allequal_raw_bids.at(i).accepted_quantity, allequal_raw_bids.at(i).requested_quantity) << "wrong player at "<<i;
+    EXPECT_EQ(allequal_production_bids.at(i).accepted_quantity, allequal_production_bids.at(i).requested_quantity) << "wrong player at "<<i;
+  }
+
+  bool t = (allequal_raw_bids.at(0).player!=10) || (allequal_raw_bids.at(1).player!=20) || (allequal_raw_bids.at(2).player!=30) || (allequal_raw_bids.at(3).player!=40);
+  EXPECT_TRUE(t)
+      << " player 0 id="<<allequal_raw_bids.at(0).player
+      << " player 1 id="<<allequal_raw_bids.at(1).player
+      << " player 2 id="<<allequal_raw_bids.at(2).player
+      << " player 3 id="<<allequal_raw_bids.at(3).player;
+  // Проверить, что одинаковые ставки обрабатываются правильно при недостаточных кол-вах
+  //
+  // <TechnicalDetails>
+  //
+  // </TechnicalDetails>
+  allequal_raw_bids.clear();
+  for(int i=0;i<4;i++) {
+    bid.player=(i+1)*10;
+    bid.accepted_quantity=0;
+    bid.requested_cost=1000;
+    bid.requested_quantity=3;
+    allequal_raw_bids.push_back(bid);
+  }
+  allequal_production_bids.clear();
+  for(int i=0;i<4;i++) {
+    bid.player=(i+1)*10;
+    bid.accepted_quantity=0;
+    bid.requested_cost=1000;
+    bid.requested_quantity=3;
+    allequal_production_bids.push_back(bid);
+  }
+  s.processBids(4, allequal_raw_bids, allequal_production_bids);
+  EXPECT_EQ(allequal_raw_bids.at(0).accepted_quantity, 3);
+  EXPECT_EQ(allequal_raw_bids.at(1).accepted_quantity, 3);
+  EXPECT_EQ(allequal_raw_bids.at(2).accepted_quantity, 2);
+  EXPECT_EQ(allequal_raw_bids.at(3).accepted_quantity, 0);
+
+  EXPECT_EQ(allequal_production_bids.at(0).accepted_quantity, 3);
+  EXPECT_EQ(allequal_production_bids.at(1).accepted_quantity, 3);
+  EXPECT_EQ(allequal_production_bids.at(2).accepted_quantity, 2);
+  EXPECT_EQ(allequal_production_bids.at(3).accepted_quantity, 0);
 }
-
-// Tests the copy c'tor.
-TEST(MyString, CopyConstructor) {
-  const MyString s1(kHelloString);
-  const MyString s2 = s1;
-  EXPECT_EQ(0, strcmp(s2.c_string(), kHelloString));
-}
-
-// Tests the Set method.
-TEST(MyString, Set) {
-  MyString s;
-
-  s.Set(kHelloString);
-  EXPECT_EQ(0, strcmp(s.c_string(), kHelloString));
-
-  // Set should work when the input pointer is the same as the one
-  // already in the MyString object.
-  s.Set(s.c_string());
-  EXPECT_EQ(0, strcmp(s.c_string(), kHelloString));
-
-  // Can we set the MyString to NULL?
-  s.Set(NULL);
-  EXPECT_STREQ(NULL, s.c_string());
-}
-*/
