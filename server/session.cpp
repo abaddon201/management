@@ -26,18 +26,20 @@ Session::~Session() {
 }
 
 bool Session::connectPlayer(int id) {
-  if (_state!=State::WAITING_FOR_PLAYERS)
+  LockObj lk {&_session_mutex};
+  if (_state!= State::WAITING_FOR_PLAYERS)
     return false;
-  if (_player_pointer_list.size() == _ruleset->max_players) {
-    return false;
-  }
   _player_pointer_list.push_back(std::shared_ptr<Player>(new Player(_ruleset, static_cast<Player::Id>(id))));
+  if (_player_pointer_list.size() == _ruleset->max_players) {
+    _state = State::PLAYING;
+  }
   return true;
 }
 
 bool Session::disconnectPlayer(Player::Id player_id) {
+  LockObj lk {&_session_mutex};
   _player_pointer_list.remove_if([player_id](std::shared_ptr<Player> p) {return p->id() == player_id;});
-  if (0 == _player_pointer_list.size()) {
+  if (_player_pointer_list.empty()) {
     _state = State::FINISHED;
     return true;
   }
@@ -45,6 +47,7 @@ bool Session::disconnectPlayer(Player::Id player_id) {
 }
 
 void Session::makeTurn() {
+  LockObj lk {&_session_mutex};
   Market::BidList raw_bids = getRawBids();
   Market::BidList production_bids = getProductionBids();
 
@@ -63,6 +66,13 @@ void Session::makeTurn() {
 int Session::getPlayersInGame() {
   return std::count_if(_player_pointer_list.begin(), _player_pointer_list.end(),
                        [](std::shared_ptr<Player> p) { return (p->state()!=Player::State::BANKRUPT) && (p->state()!=Player::State::LOST);});
+}
+
+void Session::checkIfNeedMakeTurn() {
+  if (std::all_of(_player_pointer_list.begin(), _player_pointer_list.end(),
+                  [](std::shared_ptr<Player> sp){ return sp->state() == Player::State::READY; })) {
+    makeTurn();
+  }
 }
 
 Market::BidList Session::getRawBids() {
@@ -85,7 +95,8 @@ Market::BidList Session::getProductionBids() {
   return prods;
 }
 
-bool Session::setPlayerTurn(int player_id, int build_orders, int production_orders, const Player::Bid &raw, const Player::Bid &prod){
+bool Session::setPlayerTurn(int player_id, int build_orders, int production_orders, const Player::Bid &raw, const Player::Bid &prod) {
+  LockObj lk {&_session_mutex};
   auto player_it = std::find_if(_player_pointer_list.begin(), _player_pointer_list.end(),
                                 [player_id](std::shared_ptr<Player> pl_ptr) {return player_id == pl_ptr->id();});
   if (player_it != _player_pointer_list.end()) {
@@ -94,6 +105,7 @@ bool Session::setPlayerTurn(int player_id, int build_orders, int production_orde
     (*player_it)->setProductionPlanned(production_orders);
     (*player_it)->setBuildingPlanned(build_orders);
     (*player_it)->setState(Player::State::READY);
+    checkIfNeedMakeTurn();
     return true;
   } else {
     return false;

@@ -8,6 +8,7 @@
 #include <functional>
 #include <thread>
 #include <future>
+#include <map>
 
 #include "rapidjson/document.h"
 
@@ -61,6 +62,12 @@ private:
   std::vector<std::future<JsonMessageStates>> _futures_vec;
   ///@brief Список сессий
   std::list<std::unique_ptr<Session>> _sessions;
+  ///@brief Временное решение, пока нет БД юзеров. Мапа по логинам, где значение - пара пароль-айди
+  std::map<std::string, std::pair<std::string, int>> _user_map;
+  ///@brief Временное решение, номера сессий присваиваются по порядку
+  int _session_max_id;
+  ///@brief Временное решение, номера пользователей присваиваются по порядку
+  int _user_max_id;
 
   ///@brief Первично проверим формат и отдаем полученное сообщение обработчику
   JsonMessageStates processMessage(const std::string &&msg);

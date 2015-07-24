@@ -64,14 +64,32 @@ int Server::start() {
   return 0;
 }
 
+///@todo(tolstoy) посмотреть как кошернее искать по мапе и вставлять в нее + обработка ошибок
 Server::JsonMessageStates Server::registerUserHandler(const rapidjson::Document &doc) {
-  ///@todo(tolstoy) Реализация
-  return JsonMessageStates::SUCCESSFULY_PARSED;
+
+  auto player_login = std::string(doc["data"]["login"].GetString());
+  auto player_password = std::string(doc["data"]["login"].GetString());
+  if (_user_map.end() == _user_map.find(player_login)) {
+    _user_map.insert(std::move(std::make_pair(player_login, std::make_pair(std::move(player_password), ++_user_max_id))));
+    return JsonMessageStates::SUCCESSFULY_PARSED;
+  } else {
+    ///@todo(tolstoy) состояние добавить
+    return JsonMessageStates::ACTION_DENIED;
+  }
 }
 
+///@todo(tolstoy) посмотреть как кошернее искать по мапе и удалять из нее + обработка ошибок
 Server::JsonMessageStates Server::deleteUserHandler(const rapidjson::Document &doc) {
-  ///@todo(tolstoy) Реализация
-  return JsonMessageStates::SUCCESSFULY_PARSED;
+  auto player_login = std::string(doc["data"]["login"].GetString());
+  auto player_password = std::string(doc["data"]["login"].GetString());
+  auto place_where = _user_map.find(player_login);
+  if (_user_map.end() != place_where) {
+    _user_map.erase(place_where);
+    return JsonMessageStates::SUCCESSFULY_PARSED;
+  } else {
+    ///@todo(tolstoy) состояние добавить
+    return JsonMessageStates::ACTION_DENIED;
+  }
 }
 
 ///@todo(tolstoy) Обработка ошибок и тут есть повтор куска кода из connectSessionHandler
@@ -229,14 +247,17 @@ int Server::processConnections() {
 
 int Server::retrievePlayerId(const char *player_login, const char *player_password) {
   ///@todo(tolstoy) Сделать настоящее получение айдишника
-  std::srand(std::time(0));
-  return std::rand();
+  auto pass_id_pair = _user_map[std::string(player_login)];
+  if (0 == (std::string(player_password)).compare(pass_id_pair->first)) {
+    return pass_id_pair->second;
+  } else {
+    return -1;
+  }
 }
 
 int Server::retrieveSessionId(){
   ///@todo(tolstoy) Сделать настоящее получение айдишника
-  std::srand(std::time(0));
-  return std::rand();
+  return ++_session_max_id;
 }
 
 ///@todo(tolstoy) добавить обработку ошибок
