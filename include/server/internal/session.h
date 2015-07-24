@@ -58,9 +58,9 @@ private:
   ///@brief Возвращает количество активных игроков (не банкротов, и не отключившихся)
   int getPlayersInGame();
   ///@brief Создаёт список из текущих сырьевых ставок игроков
-  Market::BidQueue getRawBids();
+  Market::BidList getRawBids();
   ///@brief Создаёт список из текущих продуктовых ставок игроков
-  Market::BidQueue getProductionBids();
+  Market::BidList getProductionBids();
 };
 
 #endif //SERVER_INTERNAL_SESSION_H
