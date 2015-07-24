@@ -18,15 +18,22 @@ TEST(Market, DefaultState) {
   // <TechnicalDetails>
   //
   // </TechnicalDetails>
-  int states[6]={};
+  int states[5];
 #define NUM_TESTS 1000000
 #define STATE_TOLERANCE 0.1
-  for (int i=0;i<NUM_TESTS;++i) {
-    s._state=0;
-    s.changeState();
-    states[s._state]++;
+
+  for (int st=0;st<5;st++) {
+    for (int i=0;i<5;i++) {
+      states[i]=0;
+    }
+    for (int i=0;i<NUM_TESTS;++i) {
+      s._state=st;
+      s.changeState();
+      states[s._state]++;
+    }
+    for (int i=0;i<5;i++)
+      EXPECT_GE(NUM_TESTS*(r->market_state_matrix[st][i]+STATE_TOLERANCE), states[i])<<"States are="<<states[0]<<","<<states[1]<<","<<states[2]<<","<<states[3]<<","<<states[4]<<","<<states[5];
   }
-  EXPECT_GE(NUM_TESTS*(r->market_state_matrix[0][0]+STATE_TOLERANCE), states[0])<<"States are="<<states[0]<<","<<states[1]<<","<<states[2]<<","<<states[3]<<","<<states[4]<<","<<states[5];
 }
 
 TEST(Market, ProcessBids) {
