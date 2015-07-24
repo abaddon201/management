@@ -2,13 +2,25 @@
 
 #include "internal/session.h"
 
-Session::Session(int id): Session(id, std::make_shared<Ruleset>(Ruleset::DEFAULT), std::string("")) {}
+Session::Session(int id): Session(id, std::make_shared<Ruleset>(Ruleset::DEFAULT), std::string(""), -1) {}
 
-Session::Session(int id, std::shared_ptr<Ruleset> rules): Session(id, rules, std::string(""))  {}
+Session::Session(int id, std::shared_ptr<Ruleset> rules): Session(id, rules, std::string(""), -1)  {}
 
-Session::Session(int id, std::string passwd): Session(id, std::make_shared<Ruleset>(Ruleset::DEFAULT), passwd) {}
+Session::Session(int id, std::string passwd):
+  Session(id, std::make_shared<Ruleset>(Ruleset::DEFAULT), passwd, -1) {}
 
-Session::Session(int id, std::shared_ptr<Ruleset> rules, std::string passwd): _id{id}, _password{passwd}, _ruleset{rules} {}
+Session::Session(int id, std::string passwd, int player_id):
+  Session(id, std::make_shared<Ruleset>(Ruleset::DEFAULT), passwd, player_id) {}
+
+Session::Session(int id, std::shared_ptr<Ruleset> rules, std::string passwd):
+  Session(id, rules, passwd, -1) {}
+
+Session::Session(int id, std::shared_ptr<Ruleset> rules, std::string passwd, int player_id):
+  _id{id}, _password{passwd}, _ruleset{rules} {
+  if (player_id >= 0) {
+    connectPlayer(player_id);
+  }
+}
 
 Session::~Session() {
 }
@@ -39,15 +51,18 @@ void Session::makeTurn() {
   _market->makeTurn(getPlayersInGame(), raw_bids, production_bids);
   for(auto p: _player_pointer_list) {
     Player::Id id = p->id();
-    Market::BidList::const_iterator raw = std::find_if(raw_bids.cbegin(), raw_bids.cend(), [id] (const Player::Bid& bid) {return bid.player == id;});
-    Market::BidList::const_iterator prod = std::find_if(production_bids.cbegin(), production_bids.cend(), [id] (const Player::Bid& bid) {return bid.player == id;});
+    Market::BidList::const_iterator raw = std::find_if(raw_bids.cbegin(), raw_bids.cend(),
+                                                       [id] (const Player::Bid& bid) {return bid.player == id;});
+    Market::BidList::const_iterator prod = std::find_if(production_bids.cbegin(), production_bids.cend(),
+                                                        [id] (const Player::Bid& bid) {return bid.player == id;});
 
     p->updateState(_turn_number, *raw, *prod);
   }
 }
 
 int Session::getPlayersInGame() {
-  return std::count_if(_player_pointer_list.begin(), _player_pointer_list.end(), [](std::shared_ptr<Player> p) { return (p->state()!=Player::State::BANKRUPT) && (p->state()!=Player::State::LOST);});
+  return std::count_if(_player_pointer_list.begin(), _player_pointer_list.end(),
+                       [](std::shared_ptr<Player> p) { return (p->state()!=Player::State::BANKRUPT) && (p->state()!=Player::State::LOST);});
 }
 
 Market::BidList Session::getRawBids() {
@@ -68,4 +83,19 @@ Market::BidList Session::getProductionBids() {
     }
   }
   return prods;
+}
+
+bool Session::setPlayerTurn(int player_id, int build_orders, int production_orders, const Player::Bid &raw, const Player::Bid &prod){
+  auto player_it = std::find_if(_player_pointer_list.begin(), _player_pointer_list.end(),
+                                [player_id](std::shared_ptr<Player> pl_ptr) {return player_id == pl_ptr->id();});
+  if (player_it != _player_pointer_list.end()) {
+    (*player_it)->setRawBid(raw);
+    (*player_it)->setProductionBid(prod);
+    (*player_it)->setProductionPlanned(production_orders);
+    (*player_it)->setBuildingPlanned(build_orders);
+    (*player_it)->setState(Player::State::READY);
+    return true;
+  } else {
+    return false;
+  }
 }

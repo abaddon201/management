@@ -50,12 +50,26 @@ public:
   void setId(int id) { _id = id;}
   ///@brief Обновляет состояние игрока после вычислений на рынке
   void updateState(int turn, Bid raw_bid, Bid production_bid);
-  ///@brief возвращает состояние игрока
+  ///@brief Возвращает состояние игрока
   State state() {return _state;}
-  ///@brief возвращает ставку игрока по материалам
+  ///@brief Устанавливает состояние игрока
+  void setState(State state) {_state = state;}
+  ///@brief Возвращает ставку игрока по материалам
   Bid rawBid() {return _current_buy_raw_bid;}
-  ///@brief возвращает ставку игрока по продукции
+  ///@brief Устанавливает ставку игрока по материалам
+  void setRawBid(Bid bid) {_current_buy_raw_bid = bid;}
+  ///@brief Возвращает ставку игрока по продукции
   Bid productionBid() {return _current_sell_production_bid;}
+  ///@brief Устанавливает ставку игрока по продукции
+  void setProductionBid(Bid bid) {_current_sell_production_bid = bid;}
+  ///@brief Возвращает план игрока по производству
+  int productionPlanned() {return _production_planned;}
+  ///@brief Устанавливает план игрока по производству
+  void setProductionPlanned(int plan) {_production_planned = plan;}
+  ///@brief Возвращает план игрока по строительству
+  int buildingPlanned() {return _building_planned;}
+  ///@brief Устанавливает план игрока по строительству
+  void setBuildingPlanned(int plan) {_building_planned = plan;}
 
 private:
   ///@brief Идентификатор игрока

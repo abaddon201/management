@@ -6,6 +6,8 @@
 #include <memory>
 #include <list>
 #include <functional>
+#include <thread>
+#include <future>
 
 #include "rapidjson/document.h"
 
@@ -53,11 +55,15 @@ private:
   fd_set _socket_set;
   ///@brief Вектор текущих дескрипторов соединений
   std::vector<int> _connections_vec;
+  ///@brief Global Mutex
+  std::mutex _list_mutex;
+  ///@brief Вектор фьючерсов в которых мы обрабатываем сообщения пришедшие от клиентов
+  std::vector<std::future<JsonMessageStates>> _futures_vec;
   ///@brief Список сессий
   std::list<std::unique_ptr<Session>> _sessions;
 
-  ///@brief Распаршиваем полученное сообщение
-  JsonMessageStates processMessage(const std::string &msg);
+  ///@brief Первично проверим формат и отдаем полученное сообщение обработчику
+  JsonMessageStates processMessage(const std::string &&msg);
   ///@brief Регистрируем пользователя
   JsonMessageStates registerUserHandler(const rapidjson::Document &doc);
   ///@brief Удаляем пользователя
@@ -92,4 +98,4 @@ private:
 
 };
 
-#endif // SERVER_H
+#endif // SERVER_INTERNAL_SERVER_H

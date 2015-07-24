@@ -2,6 +2,7 @@
 #define SERVER_INTERNAL_SESSION_H
 
 #include <memory>
+#include <thread>
 
 #include "market.h"
 #include "player.h"
@@ -20,7 +21,9 @@ public:
   Session(int id);
   Session(int id, std::shared_ptr<Ruleset> rules);
   Session(int id, std::string passwd);
-  Session(int id,std::shared_ptr<Ruleset> rules, std::string passwd);
+  Session(int id, std::string passwd, int player_id);
+  Session(int id, std::shared_ptr<Ruleset> rules, std::string passwd);
+  Session(int id, std::shared_ptr<Ruleset> rules, std::string passwd, int player_id);
   ~Session();
   ///@brief Возвращает айди сессии
   int id() {return _id;}
@@ -36,10 +39,15 @@ public:
   bool disconnectPlayer(Player::Id player_id);
   ///@brief Когда все игроки сделали ставки, сессия вызывает обработку хода и переходит в следующий месяц
   void makeTurn();
-  ///@brief возвращает указатель на набор правил
+  ///@brief Возвращает указатель на набор правил
   std::shared_ptr<Ruleset> ruleset() {return _ruleset;}
+  ///@brief Изменяем параметры игрока на основе полученного от клиента хода
+  bool setPlayerTurn(int player_id, int build_orders, int production_orders, const Player::Bid &raw, const Player::Bid &prod);
 
 private:
+  ///@brief Session mutex
+//  std::unique_ptr<std::mutex> _session_mutex;
+  std::mutex _session_mutex;
   ///@brief Идентификатор сессии
   int _id;
   ///@brief Пароль для доступа к сессии

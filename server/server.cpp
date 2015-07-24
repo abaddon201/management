@@ -5,6 +5,7 @@
 #include <fcntl.h>
 
 #include <iostream>
+#include <ctime>
 #include <vector>
 #include <utility>
 #include <algorithm>
@@ -28,8 +29,7 @@ Server::Server(int port_num): _message_reactions_vec(NUMBER_OF_ACTIONS),  _port_
 
 Server::~Server() {}
 
-int Server::start()
-{
+int Server::start() {
   _socket = socket(AF_INET, SOCK_STREAM, 0);
   if (_socket < 0) {
     perror("Failed to create socket\n");
@@ -81,9 +81,8 @@ Server::JsonMessageStates Server::createNewSessionHandler(const rapidjson::Docum
   auto session_password = doc["data"]["session_password"].GetString();
 
   auto player_id = retrievePlayerId(player_login, player_password);
-  std::unique_ptr<Session> new_session_ptr = std::make_unique<Session>(Session(retrieveSessionId()));
-  new_session_ptr->connectPlayer(player_id);
-  _sessions.push_back(std::move(new_session_ptr));
+  ///@brief тут магия мьютексов
+  _sessions.push_back(std::move(std::unique_ptr<Session>(new Session(retrieveSessionId(), session_password, player_id))));
   return JsonMessageStates::SUCCESSFULY_PARSED;
 }
 
@@ -95,10 +94,12 @@ Server::JsonMessageStates Server::connectSessionHandler(const rapidjson::Documen
   auto session_id = doc["data"]["session_id"].GetInt();
 
   auto player_id = retrievePlayerId(player_login, player_password);
+  _list_mutex.lock();
   auto session_to_connect_iter =  std::find_if(_sessions.begin(),
                                                _sessions.end(),
                                                [session_id](std::unique_ptr<Session>& s)
-  {return session_id == s->id() ? true : false;});
+                                               {return session_id == s->id() ? true : false;});
+  _list_mutex.unlock();
   if ((*session_to_connect_iter)->password() == std::string(session_password)){
     (*session_to_connect_iter)->connectPlayer(player_id);
     return JsonMessageStates::SUCCESSFULY_PARSED;
@@ -107,9 +108,32 @@ Server::JsonMessageStates Server::connectSessionHandler(const rapidjson::Documen
   }
 }
 
+///@todo(tolstoy) обработка ошибок
 Server::JsonMessageStates Server::giveTurnInSessionHandler(const rapidjson::Document &doc) {
-  ///@todo(tolstoy) Реализация
-  return JsonMessageStates::SUCCESSFULY_PARSED;
+  auto session_id = doc["data"]["session_id"].GetInt();
+  auto session_password = doc["data"]["session_password"].GetString();
+  auto player_id = doc["data"]["player_id"].GetInt();
+  auto build_orders = doc["data"]["build_orders"].GetInt();
+  auto production_orders = doc["data"]["production_orders"].GetInt();
+  auto raw_bid_cost = doc["data"]["buy_raw_bid"]["cost"].GetInt();
+  auto raw_bid_quantity = doc["data"]["buy_raw_bid"]["quantity"].GetInt();
+  auto sell_prod_cost = doc["data"]["sell_production_bid"]["cost"].GetInt();
+  auto sell_prod_quantity = doc["data"]["sell_production_bid"]["quantity"].GetInt();
+  Player::Bid raw_bid {raw_bid_cost, raw_bid_quantity, 0 , player_id};
+  Player::Bid prod_bid {sell_prod_cost, sell_prod_quantity, 0, player_id};
+
+  _list_mutex.lock();
+  auto session_to_connect_iter =  std::find_if(_sessions.begin(),
+                                               _sessions.end(),
+                                               [session_id](std::unique_ptr<Session>& s)
+                                               {return session_id == s->id() ? true : false;});
+  _list_mutex.unlock();
+  if (0 == (*session_to_connect_iter)->password().compare(std::string(session_password))) {
+    return (*session_to_connect_iter)->setPlayerTurn(player_id, build_orders, production_orders, raw_bid, prod_bid) ?
+          JsonMessageStates::SUCCESSFULY_PARSED : JsonMessageStates::BAD_ARGS;
+  } else {
+    return JsonMessageStates::ACTION_DENIED;
+  }
 }
 
 Server::JsonMessageStates Server::disconnectSessionHandler(const rapidjson::Document &doc) {
@@ -122,8 +146,7 @@ Server::JsonMessageStates Server::listSessionsHandler(const rapidjson::Document 
   return JsonMessageStates::SUCCESSFULY_PARSED;
 }
 
-int Server::work()
-{
+int Server::work() {
   int highest_sock = _socket;
   listen(_socket,5);
   while(1) {
@@ -149,8 +172,7 @@ int Server::work()
   return 0;
 }
 
-void Server::buildSocketSet()
-{
+void Server::buildSocketSet() {
   FD_ZERO(&_socket_set);
   FD_SET(_socket, &_socket_set);
   for(auto connection : _connections_vec) {
@@ -160,8 +182,7 @@ void Server::buildSocketSet()
   }
 }
 
-int Server::acceptNewConnection()
-{
+int Server::acceptNewConnection() {
   int new_connection = accept(_socket, NULL, NULL);
   int opts;
   opts = fcntl(new_connection,F_GETFL);
@@ -183,51 +204,43 @@ int Server::acceptNewConnection()
   return 0;
 }
 
-int Server::processConnections()
-{
+int Server::processConnections() {
   for (auto connection : _connections_vec) {
     if (FD_ISSET(connection, &_socket_set)) {
-      ///@todo(tolstoy) Заменить на запуск тредов по обработке
-      char buffer[256];
+      char buffer[512];
       char *cur_char;
       memset(buffer, 0, sizeof(buffer));
-      if (read(connection,buffer,255) < 0) {
+      if (read(connection,buffer,511) < 0) {
         printf("\nConnection lost: FD=%d;  Slot=%d\n",
                connection,
                std::distance(_connections_vec.begin(), std::find(_connections_vec.begin(), _connections_vec.end(), connection)));
         close(connection);
-        printf("105\n");
         connection = 0;
       } else {
+        ///@todo(tolstoy) убрать потом
         printf("\nReceived: %s; ",buffer);
-        cur_char = buffer;
-        while (cur_char[0] != 0) {
-          cur_char[0] = toupper(cur_char[0]);
-          cur_char++;
-        }
-        write(connection,buffer, sizeof(buffer));
-        write(connection,"\n", 1);
-        printf("responded: %s\n",buffer);
+        ///@todo(tolstoy) убрать утечку памяти на постоянном росте вектора
+        _futures_vec.push_back(std::move(std::async(std::launch::async, &Server::processMessage, this, std::move(std::string(buffer)))));
       }
     }
   }
   return 0;
 }
 
-int Server::retrievePlayerId(const char *player_login, const char *player_password)
-{
+int Server::retrievePlayerId(const char *player_login, const char *player_password) {
   ///@todo(tolstoy) Сделать настоящее получение айдишника
+  std::srand(std::time(0));
   return std::rand();
 }
 
-int Server::retrieveSessionId()
-{
+int Server::retrieveSessionId(){
   ///@todo(tolstoy) Сделать настоящее получение айдишника
+  std::srand(std::time(0));
   return std::rand();
 }
 
 ///@todo(tolstoy) добавить обработку ошибок
-Server::JsonMessageStates Server::processMessage(const std::string& msg) {
+Server::JsonMessageStates Server::processMessage(const std::string&& msg) {
   rapidjson::Document message;
   message.Parse(msg.c_str());
   _message_reactions_vec[message["action"].GetInt()](message);
