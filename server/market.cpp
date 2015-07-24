@@ -1,6 +1,5 @@
 #include <cstdlib>
 #include <algorithm>
-#include <iostream>
 
 #include "internal/session.h"
 #include "internal/market.h"
@@ -39,11 +38,9 @@ void Market::randomizeBids(BidList& bids) {
   while(it!=bids.end()) {
     first_it = it;
     last = it;
-    std::cout<<"b"<<std::endl;
     while ((it != bids.end()) && (it->requested_cost == first_it->requested_cost)) {
       ++last;
       ++it;
-      std::cout<<"c"<<std::endl;
     }
     if (last!=bids.end())
       ++last;
@@ -67,12 +64,9 @@ void Market::processBids(int players_in_game, BidList &raw_bids, BidList &produc
     // Можем удовлетворить все запросы
     std::for_each(raw_bids.begin(), raw_bids.end(), [](Player::Bid& a) {a.accepted_quantity = a.requested_quantity;});
   } else {
-    std::cout<<"not enougth"<<std::endl;
     std::sort(raw_bids.begin(), raw_bids.end(), [](const Player::Bid& a, const Player::Bid& b) {return b.requested_cost < a.requested_cost;});
     randomizeBids(raw_bids);
-    std::cout<<"randomed"<<std::endl;
     for(auto it=raw_bids.begin(); it!=raw_bids.end(); ++it) {
-      std::cout<<"req="<<it->requested_quantity<<", max="<<max_raw_quantity<<std::endl;
       if (it->requested_quantity > max_raw_quantity) {
         it->accepted_quantity = max_raw_quantity;
         break;

@@ -56,17 +56,15 @@ TEST(Market, ProcessBids) {
     allequal_production_bids.push_back(bid);
   }
   s.processBids(4, allequal_raw_bids, allequal_production_bids);
+
   for (int i=0;i<4;i++) {
     EXPECT_EQ(allequal_raw_bids.at(i).accepted_quantity, allequal_raw_bids.at(i).requested_quantity) << "wrong player at "<<i;
     EXPECT_EQ(allequal_production_bids.at(i).accepted_quantity, allequal_production_bids.at(i).requested_quantity) << "wrong player at "<<i;
   }
 
-  bool t = (allequal_raw_bids.at(0).player!=10) || (allequal_raw_bids.at(1).player!=20) || (allequal_raw_bids.at(2).player!=30) || (allequal_raw_bids.at(3).player!=40);
-  EXPECT_TRUE(t)
-      << " player 0 id="<<allequal_raw_bids.at(0).player
-      << " player 1 id="<<allequal_raw_bids.at(1).player
-      << " player 2 id="<<allequal_raw_bids.at(2).player
-      << " player 3 id="<<allequal_raw_bids.at(3).player;
+
+
+
   // Проверить, что одинаковые ставки обрабатываются правильно при недостаточных кол-вах
   //
   // <TechnicalDetails>
@@ -94,8 +92,22 @@ TEST(Market, ProcessBids) {
   EXPECT_EQ(allequal_raw_bids.at(2).accepted_quantity, 2);
   EXPECT_EQ(allequal_raw_bids.at(3).accepted_quantity, 0);
 
+  bool raw_randomized = (allequal_raw_bids.at(0).player!=10) || (allequal_raw_bids.at(1).player!=20) || (allequal_raw_bids.at(2).player!=30) || (allequal_raw_bids.at(3).player!=40);
+  EXPECT_TRUE(raw_randomized)
+      << " player 0 id="<<allequal_raw_bids.at(0).player
+      << " player 1 id="<<allequal_raw_bids.at(1).player
+      << " player 2 id="<<allequal_raw_bids.at(2).player
+      << " player 3 id="<<allequal_raw_bids.at(3).player;
+
   EXPECT_EQ(allequal_production_bids.at(0).accepted_quantity, 3);
   EXPECT_EQ(allequal_production_bids.at(1).accepted_quantity, 3);
   EXPECT_EQ(allequal_production_bids.at(2).accepted_quantity, 2);
   EXPECT_EQ(allequal_production_bids.at(3).accepted_quantity, 0);
+
+  bool prod_randomized = (allequal_production_bids.at(0).player!=10) || (allequal_production_bids.at(1).player!=20) || (allequal_production_bids.at(2).player!=30) || (allequal_production_bids.at(3).player!=40);
+  EXPECT_TRUE(prod_randomized)
+      << " player 0 id="<<allequal_production_bids.at(0).player
+      << " player 1 id="<<allequal_production_bids.at(1).player
+      << " player 2 id="<<allequal_production_bids.at(2).player
+      << " player 3 id="<<allequal_production_bids.at(3).player;
 }
