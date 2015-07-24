@@ -1,5 +1,6 @@
 #include <cstdlib>
 #include <algorithm>
+
 #include "internal/session.h"
 #include "internal/market.h"
 
@@ -11,12 +12,21 @@ void Market::makeTurn(int players_in_game, BidList& raw_bids, BidList& productio
 
 void Market::changeState() {
   int pos = 0;
+  double sum = 0;
+
   for(double v:_ruleset->market_state_matrix.at(_state)) {
-    double rnd = (double)std::rand()/(double)RAND_MAX;
-    if (rnd<v) {
+    sum += v;
+  }
+
+  double rnd = sum*(double)std::rand()/(double)RAND_MAX;
+  sum = 0;
+  for(double v:_ruleset->market_state_matrix.at(_state)) {
+    sum+=v;
+    if (rnd<=sum) {
       _state = pos;
       return;
     }
+    pos++;
   }
 }
 
@@ -32,6 +42,8 @@ void Market::randomizeBids(BidList& bids) {
       ++last;
       ++it;
     }
+    if (last!=bids.end())
+      ++last;
     std::random_shuffle(first_it, last);
   }
 }
@@ -55,8 +67,10 @@ void Market::processBids(int players_in_game, BidList &raw_bids, BidList &produc
     std::sort(raw_bids.begin(), raw_bids.end(), [](const Player::Bid& a, const Player::Bid& b) {return b.requested_cost < a.requested_cost;});
     randomizeBids(raw_bids);
     for(auto it=raw_bids.begin(); it!=raw_bids.end(); ++it) {
-      if (it->requested_quantity > max_raw_quantity)
+      if (it->requested_quantity > max_raw_quantity) {
+        it->accepted_quantity = max_raw_quantity;
         break;
+      }
       it->accepted_quantity = it->requested_quantity;
       max_raw_quantity-=it->requested_quantity;
     }
@@ -68,8 +82,10 @@ void Market::processBids(int players_in_game, BidList &raw_bids, BidList &produc
     std::sort(production_bids.begin(), production_bids.end(), [](const Player::Bid& a, const Player::Bid& b) {return b.requested_cost > a.requested_cost;});
     randomizeBids(production_bids);
     for(auto it=production_bids.begin(); it!=production_bids.end(); ++it) {
-      if (it->requested_quantity > max_raw_quantity)
+      if (it->requested_quantity > max_prod_quantity) {
+        it->accepted_quantity = max_prod_quantity;
         break;
+      }
       it->accepted_quantity = it->requested_quantity;
       max_prod_quantity-=it->requested_quantity;
     }

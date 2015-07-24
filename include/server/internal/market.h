@@ -7,6 +7,10 @@
 
 #include "player.h"
 
+#ifdef GTEST_INCLUDE_GTEST_GTEST_H_
+#include "gtest/gtest_prod.h"
+#endif
+
 struct Ruleset;
 
 class Market {
@@ -16,8 +20,8 @@ public:
   using BidList = std::vector<Player::Bid>;
 
 public:
-  Market(std::shared_ptr<Ruleset> r) : _ruleset{r} {}
-  ~Market();
+  Market(std::shared_ptr<Ruleset> r) : _ruleset{r} {_state = r->market_state;}
+  ~Market() {};
 
   ///@brief производит ход рынка
   /// @param players_in_game Количество игроков, которые ещё не разорились
@@ -41,6 +45,10 @@ private:
   ///@brief Перетасовывает случайным образом блоки ставок с одинаковой ценой
   /// @param @bids список ставок (должен быть отсортирован по цене ставки
   void randomizeBids(BidList& bids);
+#ifdef GTEST_INCLUDE_GTEST_GTEST_H_
+  FRIEND_TEST(Market, DefaultState);
+  FRIEND_TEST(Market, ProcessBids);
+#endif
 };
 
 #endif //SERVER_INTERNAL_MARKET_H
