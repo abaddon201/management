@@ -1,7 +1,7 @@
 #include "gtest/gtest.h"
 #include "market.h"
 
-// Tests the market state.
+// Проверка правильности обработки рынка
 TEST(Market, DefaultState) {
   Ruleset * r = new Ruleset(Ruleset::DEFAULT);
   Market s={std::shared_ptr<Ruleset>(r)};
