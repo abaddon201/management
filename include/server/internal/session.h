@@ -8,6 +8,8 @@
 #include "player.h"
 #include "ruleset.h"
 
+
+///@todo(tolstoy) Добавить очередь заданий вместо скармливания обработчику добавить метод поиска нулевых и доиграных сессий
 class Session {
 public:
   ///@brief Состояние в котором сейчас находится сессия
@@ -26,9 +28,9 @@ public:
   Session(int id, std::shared_ptr<Ruleset> rules, std::string passwd, int player_id);
   ~Session();
   ///@brief Возвращает айди сессии
-  int id() {return _id;}
+  int id() {LockObj lk {&_session_mutex}; return _id;}
   ///@brief Возвращает пароль сессии
-  std::string password() {return _password;}
+  std::string password() {LockObj lk {&_session_mutex}; return _password;}
   ///@brief Подключает игрока к сессии
   /// @returns true - если успешно подключен, false - Если нет
   bool connectPlayer(int id);
@@ -40,13 +42,20 @@ public:
   ///@brief Когда все игроки сделали ставки, сессия вызывает обработку хода и переходит в следующий месяц
   void makeTurn();
   ///@brief Возвращает указатель на набор правил
-  std::shared_ptr<Ruleset> ruleset() {return _ruleset;}
+  std::shared_ptr<Ruleset> ruleset() {LockObj lk {&_session_mutex}; return _ruleset;}
   ///@brief Изменяем параметры игрока на основе полученного от клиента хода
   bool setPlayerTurn(int player_id, int build_orders, int production_orders, const Player::Bid &raw, const Player::Bid &prod);
 
 private:
+  class LockObj {
+  public:
+    LockObj(std::mutex *mptr): _mptr{mptr} {_mptr->lock();}
+    ~LockObj() {_mptr->unlock();}
+  private:
+    std::mutex* _mptr;
+  };
+
   ///@brief Session mutex
-//  std::unique_ptr<std::mutex> _session_mutex;
   std::mutex _session_mutex;
   ///@brief Идентификатор сессии
   int _id;
@@ -65,6 +74,8 @@ private:
 
   ///@brief Возвращает количество активных игроков (не банкротов, и не отключившихся)
   int getPlayersInGame();
+  ///@brief Проверяет, не пора ли сделать ход и если пора, делает его
+  void checkIfNeedMakeTurn();
   ///@brief Создаёт список из текущих сырьевых ставок игроков
   Market::BidList getRawBids();
   ///@brief Создаёт список из текущих продуктовых ставок игроков
