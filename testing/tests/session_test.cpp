@@ -15,7 +15,7 @@ TEST(Session, ConnectPlayers) {
   res=s.connectPlayer(141);
   EXPECT_TRUE(res);
   res=s.connectPlayer(151);
-  EXPECT_TRUE(res);
+  EXPECT_FALSE(res);
 }
 
 // Проверка обработки рынка
