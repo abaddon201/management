@@ -20,7 +20,7 @@ public:
   Session(int id);
   Session(int id, std::shared_ptr<Ruleset> rules);
   Session(int id, std::string passwd);
-  Session(int id,std::shared_ptr<Ruleset> rules, std::string passwd);
+  Session(int id, std::shared_ptr<Ruleset> rules, std::string passwd);
   ~Session();
   ///@brief Возвращает айди сессии
   int id() {return _id;}
@@ -61,6 +61,12 @@ private:
   Market::BidList getRawBids();
   ///@brief Создаёт список из текущих продуктовых ставок игроков
   Market::BidList getProductionBids();
+
+#ifdef GTEST_INCLUDE_GTEST_GTEST_H_
+  FRIEND_TEST(Session, ConnectPlayers);
+  FRIEND_TEST(Session, ProcessBids);
+#endif
+
 };
 
 #endif //SERVER_INTERNAL_SESSION_H

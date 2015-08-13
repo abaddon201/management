@@ -16,8 +16,11 @@ TEMPLATE = app
 SOURCES += \
     market_test.cpp \
     ../../server/market.cpp \
+    ../../server/session.cpp \
+    ../../server/player.cpp \
     ../../server/ruleset.cpp \
-    ../gtest/gtest_main.cc
+    ../gtest/gtest_main.cc \
+    session_test.cpp
 
 INCLUDEPATH+= ../../include/server/internal ../../include/server
 INCLUDEPATH+= ../gtest/include

@@ -1,10 +1,10 @@
 #include "gtest/gtest.h"
 #include "market.h"
 
-// Tests the market state.
+// Проверка правильности обработки рынка
 TEST(Market, DefaultState) {
-  Ruleset * r = new Ruleset(Ruleset::DEFAULT);
-  Market s={std::shared_ptr<Ruleset>(r)};
+  std::shared_ptr<Ruleset> rules{new Ruleset(Ruleset::DEFAULT)};
+  Market s={rules};
 
   // check state is Ruleset::DEFAULT.market_state
   //
@@ -32,13 +32,13 @@ TEST(Market, DefaultState) {
       states[s._state]++;
     }
     for (int i=0;i<5;i++)
-      EXPECT_GE(NUM_TESTS*(r->market_state_matrix[st][i]+STATE_TOLERANCE), states[i])<<"States are="<<states[0]<<","<<states[1]<<","<<states[2]<<","<<states[3]<<","<<states[4]<<","<<states[5];
+      EXPECT_GE(NUM_TESTS*(rules->market_state_matrix[st][i]+STATE_TOLERANCE), states[i])<<"States are="<<states[0]<<","<<states[1]<<","<<states[2]<<","<<states[3]<<","<<states[4]<<","<<states[5];
   }
 }
 
 TEST(Market, ProcessBids) {
-  Ruleset * r = new Ruleset(Ruleset::DEFAULT);
-  Market s={std::shared_ptr<Ruleset>(r)};
+  std::shared_ptr<Ruleset> rules{new Ruleset(Ruleset::DEFAULT)};
+  Market s={rules};
 
   // Проверить, что одинаковые ставки обрабатываются правильно при достаточных кол-вах
   //
