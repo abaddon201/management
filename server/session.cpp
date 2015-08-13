@@ -52,9 +52,11 @@ int Session::getPlayersInGame() {
 
 Market::BidList Session::getRawBids() {
   Market::BidList raws;
+  int min_raw_cost = _ruleset->market_raw.at(_market->state()).second;
   for(auto p: _player_pointer_list) {
     if (p->state() == Player::State::READY) {
-      raws.push_back(p->rawBid());
+      if (min_raw_cost<=p->rawBid().requested_cost)
+        raws.push_back(p->rawBid());
     }
   }
   return raws;
@@ -62,9 +64,11 @@ Market::BidList Session::getRawBids() {
 
 Market::BidList Session::getProductionBids() {
   Market::BidList prods;
+  int max_prod_cost = _ruleset->market_production.at(_market->state()).second;
   for(auto p: _player_pointer_list) {
     if (p->state() == Player::State::READY) {
-      prods.push_back(p->productionBid());
+      if (max_prod_cost>=p->rawBid().requested_cost)
+        prods.push_back(p->productionBid());
     }
   }
   return prods;
