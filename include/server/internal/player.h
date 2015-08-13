@@ -19,6 +19,7 @@ public:
   using List = std::list<std::shared_ptr<Player>>;
   ///@brief Псевдоним для итератора по списку игроков
   using Iterator = Player::List::iterator;
+  ///@brief Псевдоним для типа идентификатора
   using Id = int;
 
   enum class State {
@@ -29,13 +30,17 @@ public:
     LOST  ///<@brief Соединение потеряно
   };
 
+  ///@brief Структура ставки
   struct Bid {
-    int requested_cost;
-    int requested_quantity;
-    int accepted_quantity;
-    Player::Id player;
+    int requested_cost; ///<@brief Запрошенная цена
+    int requested_quantity; ///<@brief Запрошенное кол-во
+    int accepted_quantity; ///<@brief Принятое рынком количество
+    Player::Id player; ///<@brief Идентификатор игрока, сделавшего ставку
   };
 
+  ///@brief Конструктор игрока
+  /// @param ruleset набор правил, которым подчиняется игрок
+  /// @param id Идентификатор игрока (генерируется сервером)
   Player(std::shared_ptr<Ruleset> ruleset, Player::Id id) : _id{id}, _ruleset{ruleset} {}
   ~Player() {}
 

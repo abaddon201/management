@@ -1,5 +1,7 @@
 #include <vector>
 #include <utility>
+#include <algorithm>
+
 #include "internal/server.h"
 
 ///@todo(tolstoy) добавить словать констант, для json

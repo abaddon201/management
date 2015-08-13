@@ -29,8 +29,6 @@ void Player::manufacture() {
   _storage.raw_stored -= _ruleset->manufacturing_cost.first * _production_planned;
   _cash -= _ruleset->manufacturing_cost.second * _production_planned;
   _storage.production_stored += _production_planned;
-  ///@todo(tolstoy) или это бессмысленное действие
-  _production_planned = 0;
 }
 
 void Player::buildFactories(const int turn) {
