@@ -28,7 +28,7 @@ public:
   /// @param raw_bids Ставки игроков на закупку материалов
   /// @param production_bids Ставки игроков на продажу товаров
   void makeTurn(int players_in_game, BidList& raw_bids, BidList& production_bids);
-
+  int state() {return _state;}
 private:
   ///@brief текущее состояние рынка
   int _state;

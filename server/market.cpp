@@ -51,10 +51,7 @@ void Market::randomizeBids(BidList& bids) {
 void Market::processBids(int players_in_game, BidList &raw_bids, BidList &production_bids) {
   ///@todo (abby): не реализовно нихрена
   int max_prod_quantity = _ruleset->market_production.at(_state).first * players_in_game;
-  ///@fixme (abby): по ходу, цены рынка интересны только в гуйне... Хотя, можно добавить проверку и сюда, но не логично...
-  int max_prod_cost = _ruleset->market_production.at(_state).second;
   int max_raw_quantity = _ruleset->market_raw.at(_state).first * players_in_game;
-  int min_raw_cost = _ruleset->market_raw.at(_state).second;
 
   int total_raw_bids = 0;
   std::for_each(raw_bids.begin(), raw_bids.end(), [&total_raw_bids](Player::Bid& a) {total_raw_bids+=a.requested_quantity;});
