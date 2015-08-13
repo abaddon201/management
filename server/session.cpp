@@ -8,7 +8,7 @@ Session::Session(int id, std::shared_ptr<Ruleset> rules): Session(id, rules, std
 
 Session::Session(int id, std::string passwd): Session(id, std::make_shared<Ruleset>(Ruleset::DEFAULT), passwd) {}
 
-Session::Session(int id, std::shared_ptr<Ruleset> rules, std::string passwd): _id{id}, _password{passwd}, _ruleset{rules} {}
+Session::Session(int id, std::shared_ptr<Ruleset> rules, std::string passwd): _id{id}, _password{passwd}, _ruleset{rules} {_state=State::WAITING_FOR_PLAYERS;}
 
 Session::~Session() {
 }
