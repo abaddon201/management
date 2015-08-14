@@ -52,4 +52,16 @@ TEST(Player, Factories) {
   EXPECT_EQ(p._factories_to_build.front()->month_when_done, 10 + Ruleset::DEFAULT.factory_build_time);
   EXPECT_EQ(p._factories_to_build.back()->month_when_done, 15 + Ruleset::DEFAULT.factory_build_time);
   EXPECT_EQ(p._cash, Ruleset::DEFAULT.startup_money-11*Ruleset::DEFAULT.factory_build_cost/2);
+
+  // построим одну фабрику
+  p.buildFactories(10 + Ruleset::DEFAULT.factory_build_time);
+  EXPECT_EQ(p._factories_to_build.size(), 10);
+  EXPECT_EQ(p._factories_to_build.front()->month_when_done, 15 + Ruleset::DEFAULT.factory_build_time);
+  EXPECT_EQ(p._factories_to_build.back()->month_when_done, 15 + Ruleset::DEFAULT.factory_build_time);
+  EXPECT_EQ(p._cash, Ruleset::DEFAULT.startup_money-12*Ruleset::DEFAULT.factory_build_cost/2);
+
+  // построим остальные
+  p.buildFactories(15 + Ruleset::DEFAULT.factory_build_time);
+  EXPECT_EQ(p._factories_to_build.size(), 0);
+  EXPECT_EQ(p._cash, Ruleset::DEFAULT.startup_money-22*Ruleset::DEFAULT.factory_build_cost/2);
 }
