@@ -16,7 +16,7 @@ struct Ruleset {
       turn_timeout{tt}, max_players{mpl},
       factory_cost{fc}, raw_cost{rc}, product_cost{pc},
       manufacturing_cost{mc},
-      money{m}, factory_build_time{fbt}, factory_build_cost{fbc},
+      startup_money{m}, factory_build_time{fbt}, factory_build_cost{fbc},
       startup_raw{sr}, startup_products{sp}, startup_factory_count{sfc}, market_state{ms},
       market_state_matrix{msm}, market_raw{mr}, market_production{mp} {};
   ~Ruleset() {};
@@ -34,7 +34,7 @@ struct Ruleset {
   ///@brief Стоимость производства изделия (кол-во сырья, деньги)
   ManufacturingCost manufacturing_cost;
   ///@brief Первоначальный капитал
-  int money;
+  int startup_money;
   ///@brief Время постройки фабрики
   int factory_build_time;
   ///@brief Стоимость постройки фабрики (чётное)

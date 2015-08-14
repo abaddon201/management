@@ -32,6 +32,10 @@ public:
 
   ///@brief Структура ставки
   struct Bid {
+    Bid() : requested_cost{0}
+    , requested_quantity{0}
+    , accepted_quantity{0}
+    , player{0} {}
     int requested_cost; ///<@brief Запрошенная цена
     int requested_quantity; ///<@brief Запрошенное кол-во
     int accepted_quantity; ///<@brief Принятое рынком количество
@@ -41,7 +45,16 @@ public:
   ///@brief Конструктор игрока
   /// @param ruleset набор правил, которым подчиняется игрок
   /// @param id Идентификатор игрока (генерируется сервером)
-  Player(std::shared_ptr<Ruleset> ruleset, Player::Id id) : _id{id}, _ruleset{ruleset} {}
+  Player(std::shared_ptr<Ruleset> ruleset, Player::Id id)
+    : _id{id}
+    , _production_planned{0}
+    , _building_planned{0}
+    , _storage{ruleset->startup_products, ruleset->startup_raw}
+    , _number_of_working_factories{ruleset->startup_factory_count}
+    , _cash{ruleset->startup_money}
+    , _ruleset{ruleset}
+    , _state{State::LOGGED_IN}
+  {}
   ~Player() {}
 
   ///@brief Возвращает идентификатор игрока
@@ -49,13 +62,13 @@ public:
   ///@brief Устанавливает идентификатор игрока
   void setId(int id) { _id = id;}
   ///@brief Обновляет состояние игрока после вычислений на рынке
-  void updateState(int turn, Bid raw_bid, Bid production_bid);
+  void updateState(int turn);
   ///@brief возвращает состояние игрока
   State state() {return _state;}
   ///@brief возвращает ставку игрока по материалам
-  Bid rawBid() {return _current_buy_raw_bid;}
+  Bid& rawBid() {return _current_buy_raw_bid;}
   ///@brief возвращает ставку игрока по продукции
-  Bid productionBid() {return _current_sell_production_bid;}
+  Bid& productionBid() {return _current_sell_production_bid;}
 
 private:
   ///@brief Идентификатор игрока
@@ -92,6 +105,10 @@ private:
   void payBills();
   ///@brief Производит обработку ставок
   void processBids();
+
+#ifdef GTEST_INCLUDE_GTEST_GTEST_H_
+  FRIEND_TEST(Session, ProcessBids);
+#endif
 };
 
 #endif //SERVER_INTERNAL_PLAYER_H

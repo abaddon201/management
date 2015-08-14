@@ -1,11 +1,9 @@
 #include "internal/player.h"
 
-void Player::updateState(int turn, Bid raw_bid, Bid production_bid) {
+void Player::updateState(int turn) {
   orderFactories(turn); ///<@brief деньги за заказ фабрики списываются сразу
   manufacture();
   buildFactories(turn);
-  _current_buy_raw_bid = raw_bid;
-  _current_sell_production_bid = production_bid;
   processBids();
   payBills();
   if (_cash < 0) {

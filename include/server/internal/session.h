@@ -38,6 +38,8 @@ public:
   void makeTurn();
   ///@brief возвращает указатель на набор правил
   std::shared_ptr<Ruleset> ruleset() {return _ruleset;}
+  ///@brief Начало игры
+  bool beginGame();
 
 private:
   ///@brief Идентификатор сессии
