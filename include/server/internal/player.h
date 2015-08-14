@@ -109,6 +109,7 @@ private:
 #ifdef GTEST_INCLUDE_GTEST_GTEST_H_
   FRIEND_TEST(Session, ProcessBids);
   FRIEND_TEST(Player, CreatePlayers);
+  FRIEND_TEST(Player, Factories);
 #endif
 };
 
