@@ -39,11 +39,13 @@ TEST(Player, Factories) {
   // Проверка заказа 1 фабрики, при текущем ходе 10
   EXPECT_EQ(p._cash, Ruleset::DEFAULT.startup_money);
   EXPECT_EQ(p._factories_to_build.size(), 0);
+  EXPECT_EQ(p._number_of_working_factories, Ruleset::DEFAULT.startup_factory_count);
   p._building_planned = 1;
   p.orderFactories(10);
   EXPECT_EQ(p._factories_to_build.size(), 1);
   EXPECT_EQ(p._factories_to_build.front()->month_when_done, 10 + Ruleset::DEFAULT.factory_build_time);
   EXPECT_EQ(p._cash, Ruleset::DEFAULT.startup_money-Ruleset::DEFAULT.factory_build_cost/2);
+  EXPECT_EQ(p._number_of_working_factories, Ruleset::DEFAULT.startup_factory_count);
 
   // Проверка заказа ещё 10 фабрик, при текущем ходе 15
   p._building_planned = 10;
@@ -52,6 +54,7 @@ TEST(Player, Factories) {
   EXPECT_EQ(p._factories_to_build.front()->month_when_done, 10 + Ruleset::DEFAULT.factory_build_time);
   EXPECT_EQ(p._factories_to_build.back()->month_when_done, 15 + Ruleset::DEFAULT.factory_build_time);
   EXPECT_EQ(p._cash, Ruleset::DEFAULT.startup_money-11*Ruleset::DEFAULT.factory_build_cost/2);
+  EXPECT_EQ(p._number_of_working_factories, Ruleset::DEFAULT.startup_factory_count);
 
   // построим одну фабрику
   p.buildFactories(10 + Ruleset::DEFAULT.factory_build_time);
@@ -59,9 +62,11 @@ TEST(Player, Factories) {
   EXPECT_EQ(p._factories_to_build.front()->month_when_done, 15 + Ruleset::DEFAULT.factory_build_time);
   EXPECT_EQ(p._factories_to_build.back()->month_when_done, 15 + Ruleset::DEFAULT.factory_build_time);
   EXPECT_EQ(p._cash, Ruleset::DEFAULT.startup_money-12*Ruleset::DEFAULT.factory_build_cost/2);
+  EXPECT_EQ(p._number_of_working_factories, Ruleset::DEFAULT.startup_factory_count + 1);
 
   // построим остальные
   p.buildFactories(15 + Ruleset::DEFAULT.factory_build_time);
   EXPECT_EQ(p._factories_to_build.size(), 0);
   EXPECT_EQ(p._cash, Ruleset::DEFAULT.startup_money-22*Ruleset::DEFAULT.factory_build_cost/2);
+  EXPECT_EQ(p._number_of_working_factories, Ruleset::DEFAULT.startup_factory_count + 11);
 }
