@@ -30,7 +30,7 @@ void Player::manufacture() {
 }
 
 void Player::buildFactories(const int turn) {
-  if (turn == _factories_to_build.front()->month_when_done) {
+  while (turn == _factories_to_build.front()->month_when_done) {
     _number_of_working_factories++;
     _factories_to_build.pop();
     _cash -= _ruleset->factory_build_cost / 2;
