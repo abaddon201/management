@@ -130,6 +130,10 @@ TEST(Session, ProcessBids) {
   (*it)->_current_sell_production_bid.accepted_quantity = 0;
   (*it)->_current_sell_production_bid.requested_cost = 1000;
   (*it)->_current_sell_production_bid.requested_quantity = 3;
+  (*it)->_current_buy_raw_bid.player = (*it)->_id;
+  (*it)->_current_buy_raw_bid.accepted_quantity = 0;
+  (*it)->_current_buy_raw_bid.requested_cost = 100;
+  (*it)->_current_buy_raw_bid.requested_quantity = 3;
   (*it)->_state = Player::State::READY;
   ++it;
   // 121
@@ -137,6 +141,10 @@ TEST(Session, ProcessBids) {
   (*it)->_current_sell_production_bid.accepted_quantity = 0;
   (*it)->_current_sell_production_bid.requested_cost = 10000;
   (*it)->_current_sell_production_bid.requested_quantity = 3;
+  (*it)->_current_buy_raw_bid.player = (*it)->_id;
+  (*it)->_current_buy_raw_bid.accepted_quantity = 0;
+  (*it)->_current_buy_raw_bid.requested_cost = 1000;
+  (*it)->_current_buy_raw_bid.requested_quantity = 3;
   (*it)->_state = Player::State::READY;
   ++it;
   // 131
@@ -144,6 +152,10 @@ TEST(Session, ProcessBids) {
   (*it)->_current_sell_production_bid.accepted_quantity = 0;
   (*it)->_current_sell_production_bid.requested_cost = 1000;
   (*it)->_current_sell_production_bid.requested_quantity = 3;
+  (*it)->_current_buy_raw_bid.player = (*it)->_id;
+  (*it)->_current_buy_raw_bid.accepted_quantity = 0;
+  (*it)->_current_buy_raw_bid.requested_cost = 100;
+  (*it)->_current_buy_raw_bid.requested_quantity = 3;
   (*it)->_state = Player::State::READY;
   ++it;
   // 141
@@ -151,6 +163,10 @@ TEST(Session, ProcessBids) {
   (*it)->_current_sell_production_bid.accepted_quantity = 0;
   (*it)->_current_sell_production_bid.requested_cost = 10000;
   (*it)->_current_sell_production_bid.requested_quantity = 3;
+  (*it)->_current_buy_raw_bid.player = (*it)->_id;
+  (*it)->_current_buy_raw_bid.accepted_quantity = 0;
+  (*it)->_current_buy_raw_bid.requested_cost = 1000;
+  (*it)->_current_buy_raw_bid.requested_quantity = 3;
   (*it)->_state = Player::State::READY;
 
   res = s.beginGame();
@@ -159,14 +175,18 @@ TEST(Session, ProcessBids) {
   it = s._player_pointer_list.begin();
   // 111
   EXPECT_EQ((*it)->_current_sell_production_bid.accepted_quantity, 3);
+  EXPECT_EQ((*it)->_current_buy_raw_bid.accepted_quantity, 0);
   ++it;
   // 121
   EXPECT_EQ((*it)->_current_sell_production_bid.accepted_quantity, 0);
+  EXPECT_EQ((*it)->_current_buy_raw_bid.accepted_quantity, 3);
   ++it;
   // 131
   EXPECT_EQ((*it)->_current_sell_production_bid.accepted_quantity, 3);
+  EXPECT_EQ((*it)->_current_buy_raw_bid.accepted_quantity, 0);
   ++it;
   // 141
   EXPECT_EQ((*it)->_current_sell_production_bid.accepted_quantity, 0);
+  EXPECT_EQ((*it)->_current_buy_raw_bid.accepted_quantity, 3);
 
 }
