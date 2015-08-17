@@ -43,7 +43,7 @@ void Player::processBids() {
 }
 
 void Player::payBills() {
-  _cash -= _storage.production_stored * _ruleset->product_cost;
-  _cash -= _storage.raw_stored * _ruleset->raw_cost;
+  _cash -= _storage.production_stored * _ruleset->product_store_cost;
+  _cash -= _storage.raw_stored * _ruleset->raw_store_cost;
   _cash -= _number_of_working_factories * _ruleset->factory_cost;
 }
