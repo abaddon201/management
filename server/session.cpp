@@ -75,7 +75,7 @@ Market::BidList Session::getProductionBids() {
   int max_prod_cost = _ruleset->market_production.at(_market->state()).second;
   for(auto p: _player_pointer_list) {
     if (p->state() == Player::State::READY) {
-      if (max_prod_cost>=p->productionBid().requested_cost)
+      if ((max_prod_cost>=p->productionBid().requested_cost) && (p->production_count()>=p->productionBid().requested_quantity))
         prods.push_back(p->productionBid());
     }
   }

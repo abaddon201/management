@@ -69,6 +69,7 @@ public:
   Bid& rawBid() {return _current_buy_raw_bid;}
   ///@brief возвращает ставку игрока по продукции
   Bid& productionBid() {return _current_sell_production_bid;}
+  int production_count() {return _storage.production_stored;}
 
 private:
   ///@brief Идентификатор игрока
@@ -110,6 +111,7 @@ private:
   FRIEND_TEST(Session, ProcessBids);
   FRIEND_TEST(Player, CreatePlayers);
   FRIEND_TEST(Player, Factories);
+  FRIEND_TEST(Player, State);
 #endif
 };
 
