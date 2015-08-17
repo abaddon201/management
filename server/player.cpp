@@ -40,7 +40,9 @@ void Player::buildFactories(const int turn) {
 
 void Player::processBids() {
   _cash -= _current_buy_raw_bid.requested_cost * _current_buy_raw_bid.accepted_quantity;
+  _storage.raw_stored += _current_buy_raw_bid.accepted_quantity;
   _cash += _current_sell_production_bid.requested_cost * _current_sell_production_bid.accepted_quantity;
+  _storage.production_stored -= _current_sell_production_bid.accepted_quantity;
 }
 
 void Player::payBills() {
