@@ -126,6 +126,7 @@ TEST(Session, ProcessBids) {
   EXPECT_TRUE(res);
   Player::List::iterator it = s._player_pointer_list.begin();
   // 111
+  (*it)->_storage.production_stored = 4;
   (*it)->_current_sell_production_bid.player = (*it)->_id;
   (*it)->_current_sell_production_bid.accepted_quantity = 0;
   (*it)->_current_sell_production_bid.requested_cost = 1000;
@@ -137,6 +138,7 @@ TEST(Session, ProcessBids) {
   (*it)->_state = Player::State::READY;
   ++it;
   // 121
+  (*it)->_storage.production_stored = 4;
   (*it)->_current_sell_production_bid.player = (*it)->_id;
   (*it)->_current_sell_production_bid.accepted_quantity = 0;
   (*it)->_current_sell_production_bid.requested_cost = 10000;
@@ -148,6 +150,7 @@ TEST(Session, ProcessBids) {
   (*it)->_state = Player::State::READY;
   ++it;
   // 131
+  (*it)->_storage.production_stored = 4;
   (*it)->_current_sell_production_bid.player = (*it)->_id;
   (*it)->_current_sell_production_bid.accepted_quantity = 0;
   (*it)->_current_sell_production_bid.requested_cost = 1000;
@@ -159,6 +162,7 @@ TEST(Session, ProcessBids) {
   (*it)->_state = Player::State::READY;
   ++it;
   // 141
+  (*it)->_storage.production_stored = 4;
   (*it)->_current_sell_production_bid.player = (*it)->_id;
   (*it)->_current_sell_production_bid.accepted_quantity = 0;
   (*it)->_current_sell_production_bid.requested_cost = 10000;
