@@ -29,7 +29,7 @@ TEST(Player, CreatePlayers) {
   EXPECT_EQ(p._storage.production_stored, Ruleset::DEFAULT.startup_products);
   EXPECT_EQ(p._storage.raw_stored, Ruleset::DEFAULT.startup_raw);
   EXPECT_EQ(p._number_of_working_factories, Ruleset::DEFAULT.startup_factory_count);
-  EXPECT_EQ(p._factories_to_build.size(), 0);
+  EXPECT_EQ(p._factories_to_build.size(), 0U);
   EXPECT_EQ(p._cash, Ruleset::DEFAULT.startup_money);
   EXPECT_EQ(p._state, Player::State::LOGGED_IN);
 }
@@ -38,11 +38,11 @@ TEST(Player, Factories) {
   Player p{std::make_shared<Ruleset>(Ruleset::DEFAULT), 42};
   // Проверка заказа 1 фабрики, при текущем ходе 10
   EXPECT_EQ(p._cash, Ruleset::DEFAULT.startup_money);
-  EXPECT_EQ(p._factories_to_build.size(), 0);
+  EXPECT_EQ(p._factories_to_build.size(), 0U);
   EXPECT_EQ(p._number_of_working_factories, Ruleset::DEFAULT.startup_factory_count);
   p._building_planned = 1;
   p.orderFactories(10);
-  EXPECT_EQ(p._factories_to_build.size(), 1);
+  EXPECT_EQ(p._factories_to_build.size(), 1U);
   EXPECT_EQ(p._factories_to_build.front()->month_when_done, 10 + Ruleset::DEFAULT.factory_build_time);
   EXPECT_EQ(p._cash, Ruleset::DEFAULT.startup_money-Ruleset::DEFAULT.factory_build_cost/2);
   EXPECT_EQ(p._number_of_working_factories, Ruleset::DEFAULT.startup_factory_count);
@@ -50,7 +50,7 @@ TEST(Player, Factories) {
   // Проверка заказа ещё 10 фабрик, при текущем ходе 15
   p._building_planned = 10;
   p.orderFactories(15);
-  EXPECT_EQ(p._factories_to_build.size(), 11);
+  EXPECT_EQ(p._factories_to_build.size(), 11U);
   EXPECT_EQ(p._factories_to_build.front()->month_when_done, 10 + Ruleset::DEFAULT.factory_build_time);
   EXPECT_EQ(p._factories_to_build.back()->month_when_done, 15 + Ruleset::DEFAULT.factory_build_time);
   EXPECT_EQ(p._cash, Ruleset::DEFAULT.startup_money-11*Ruleset::DEFAULT.factory_build_cost/2);
@@ -58,7 +58,7 @@ TEST(Player, Factories) {
 
   // построим одну фабрику
   p.buildFactories(10 + Ruleset::DEFAULT.factory_build_time);
-  EXPECT_EQ(p._factories_to_build.size(), 10);
+  EXPECT_EQ(p._factories_to_build.size(), 10U);
   EXPECT_EQ(p._factories_to_build.front()->month_when_done, 15 + Ruleset::DEFAULT.factory_build_time);
   EXPECT_EQ(p._factories_to_build.back()->month_when_done, 15 + Ruleset::DEFAULT.factory_build_time);
   EXPECT_EQ(p._cash, Ruleset::DEFAULT.startup_money-12*Ruleset::DEFAULT.factory_build_cost/2);
@@ -66,7 +66,7 @@ TEST(Player, Factories) {
 
   // построим остальные
   p.buildFactories(15 + Ruleset::DEFAULT.factory_build_time);
-  EXPECT_EQ(p._factories_to_build.size(), 0);
+  EXPECT_EQ(p._factories_to_build.size(), 0U);
   EXPECT_EQ(p._cash, Ruleset::DEFAULT.startup_money-22*Ruleset::DEFAULT.factory_build_cost/2);
   EXPECT_EQ(p._number_of_working_factories, Ruleset::DEFAULT.startup_factory_count + 11);
 }
@@ -99,7 +99,7 @@ TEST(Player, State) {
   EXPECT_EQ(p._storage.production_stored, Ruleset::DEFAULT.startup_products);
   EXPECT_EQ(p._storage.raw_stored, Ruleset::DEFAULT.startup_raw);
   EXPECT_EQ(p._number_of_working_factories, Ruleset::DEFAULT.startup_factory_count);
-  EXPECT_EQ(p._factories_to_build.size(), 0);
+  EXPECT_EQ(p._factories_to_build.size(), 0U);
   EXPECT_EQ(p._cash, Ruleset::DEFAULT.startup_money - (Ruleset::DEFAULT.startup_products*Ruleset::DEFAULT.product_store_cost + Ruleset::DEFAULT.startup_raw*Ruleset::DEFAULT.raw_store_cost + p._number_of_working_factories*Ruleset::DEFAULT.factory_cost));
   EXPECT_EQ(p._state, Player::State::THINKING);
   p.updateState(2);
@@ -127,7 +127,7 @@ TEST(Player, State) {
   EXPECT_EQ(p._storage.production_stored, Ruleset::DEFAULT.startup_products);
   EXPECT_EQ(p._storage.raw_stored, Ruleset::DEFAULT.startup_raw);
   EXPECT_EQ(p._number_of_working_factories, Ruleset::DEFAULT.startup_factory_count);
-  EXPECT_EQ(p._factories_to_build.size(), 0);
+  EXPECT_EQ(p._factories_to_build.size(), 0U);
   EXPECT_EQ(p._cash, Ruleset::DEFAULT.startup_money - 2*(Ruleset::DEFAULT.startup_products*Ruleset::DEFAULT.product_store_cost + Ruleset::DEFAULT.startup_raw*Ruleset::DEFAULT.raw_store_cost + p._number_of_working_factories*Ruleset::DEFAULT.factory_cost));
   EXPECT_EQ(p._state, Player::State::THINKING);
   p.updateState(3);
@@ -155,7 +155,7 @@ TEST(Player, State) {
   EXPECT_EQ(p._storage.production_stored, Ruleset::DEFAULT.startup_products);
   EXPECT_EQ(p._storage.raw_stored, Ruleset::DEFAULT.startup_raw);
   EXPECT_EQ(p._number_of_working_factories, Ruleset::DEFAULT.startup_factory_count);
-  EXPECT_EQ(p._factories_to_build.size(), 0);
+  EXPECT_EQ(p._factories_to_build.size(), 0U);
   EXPECT_EQ(p._cash, Ruleset::DEFAULT.startup_money - 3*(Ruleset::DEFAULT.startup_products*Ruleset::DEFAULT.product_store_cost + Ruleset::DEFAULT.startup_raw*Ruleset::DEFAULT.raw_store_cost + p._number_of_working_factories*Ruleset::DEFAULT.factory_cost));
   EXPECT_EQ(p._state, Player::State::BANKRUPT);
 
@@ -196,7 +196,7 @@ TEST(Player, State) {
   EXPECT_EQ(p2._storage.production_stored, 4 - 3);
   EXPECT_EQ(p2._storage.raw_stored, Ruleset::DEFAULT.startup_raw + 3);
   EXPECT_EQ(p2._number_of_working_factories, Ruleset::DEFAULT.startup_factory_count);
-  EXPECT_EQ(p2._factories_to_build.size(), 0);
+  EXPECT_EQ(p2._factories_to_build.size(), 0U);
   EXPECT_EQ(p2._cash, Ruleset::DEFAULT.startup_money - ((4-3)*Ruleset::DEFAULT.product_store_cost + (Ruleset::DEFAULT.startup_raw + 3)*Ruleset::DEFAULT.raw_store_cost + p2._number_of_working_factories*Ruleset::DEFAULT.factory_cost) - p2.rawBid().accepted_quantity*p2.rawBid().requested_cost + p2.productionBid().accepted_quantity*p2.productionBid().requested_cost-p2._production_planned*Ruleset::DEFAULT.manufacturing_cost.second);
   EXPECT_EQ(p2._state, Player::State::THINKING);
 
@@ -242,7 +242,7 @@ TEST(Player, State) {
   EXPECT_EQ(p3._storage.production_stored, 4 - 3/*bid*/ + 2/*production*/);
   EXPECT_EQ(p3._storage.raw_stored, Ruleset::DEFAULT.startup_raw + 3/*bid*/ - 2/*production*/);
   EXPECT_EQ(p3._number_of_working_factories, Ruleset::DEFAULT.startup_factory_count);
-  EXPECT_EQ(p3._factories_to_build.size(), 0);
+  EXPECT_EQ(p3._factories_to_build.size(), 0U);
   EXPECT_EQ(p3._cash, Ruleset::DEFAULT.startup_money - ((4 - 3 + 2)*Ruleset::DEFAULT.product_store_cost + (Ruleset::DEFAULT.startup_raw + 3 - 2)*Ruleset::DEFAULT.raw_store_cost + p3._number_of_working_factories*Ruleset::DEFAULT.factory_cost) - p3.rawBid().accepted_quantity*p3.rawBid().requested_cost + p3.productionBid().accepted_quantity*p3.productionBid().requested_cost - p3._production_planned*Ruleset::DEFAULT.manufacturing_cost.second);
   EXPECT_EQ(p3._state, Player::State::THINKING);
 }
