@@ -37,3 +37,8 @@ testing/gtest/gtest.pro.user
 testing/tests/tests.pro.user
 testing/tests/tests.pro.user.18
 testing/tests/tests.pro.user.3.2-pre1
+
+doxygen.errs
+doxygen_sqlite3.db
+html
+latex
