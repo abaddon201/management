@@ -8,8 +8,9 @@ void Player::updateState(int turn) {
   payBills();
   if (_cash < 0) {
     _state = State::BANKRUPT;
+  } else {
+    _state = State::THINKING;
   }
-  _state = State::THINKING;
 }
 
 void Player::orderFactories(int turn) {
