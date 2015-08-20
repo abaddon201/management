@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <iostream>
 
 #include "internal/session.h"
 
@@ -35,14 +36,21 @@ bool Session::disconnectPlayer(Player::Id player_id) {
 void Session::makeTurn() {
   Market::BidList raw_bids = getRawBids();
   Market::BidList production_bids = getProductionBids();
-
   _market->makeTurn(getPlayersInGame(), raw_bids, production_bids);
   for(auto p: _player_pointer_list) {
     Player::Id id = p->id();
     Market::BidList::const_iterator raw = std::find_if(raw_bids.cbegin(), raw_bids.cend(), [id] (const Player::Bid& bid) {return bid.player == id;});
     Market::BidList::const_iterator prod = std::find_if(production_bids.cbegin(), production_bids.cend(), [id] (const Player::Bid& bid) {return bid.player == id;});
 
-    p->updateState(_turn_number, *raw, *prod);
+    if (raw!=raw_bids.end())
+      p->rawBid().accepted_quantity = raw->accepted_quantity;
+    else
+      p->rawBid().accepted_quantity = 0;
+    if (prod!=production_bids.end())
+      p->productionBid().accepted_quantity = prod->accepted_quantity;
+    else
+      p->productionBid().accepted_quantity = 0;
+    p->updateState(_turn_number);
   }
 }
 
@@ -67,9 +75,15 @@ Market::BidList Session::getProductionBids() {
   int max_prod_cost = _ruleset->market_production.at(_market->state()).second;
   for(auto p: _player_pointer_list) {
     if (p->state() == Player::State::READY) {
-      if (max_prod_cost>=p->rawBid().requested_cost)
+      if ((max_prod_cost>=p->productionBid().requested_cost) && (p->production_count()>=p->productionBid().requested_quantity))
         prods.push_back(p->productionBid());
     }
   }
   return prods;
+}
+
+bool Session::beginGame() {
+  ///@fixme (abby): must check all preconditions, like players count, ruleset initialized, and so on
+  _market=std::make_shared<Market>(_ruleset);
+  return true;
 }

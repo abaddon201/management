@@ -29,11 +29,16 @@
 management.pro.user
 deployment.pri
 
-testing/build-tests-Desktop_Qt_5_5_0_GCC_64bit-Debug/Makefile
+testing/build-gtest-Desktop_Qt_5_5_0_GCC_64bit-Debug/*
+testing/build-tests-Desktop_Qt_5_5_0_GCC_64bit-Debug/*
 management.pro.user.18
 management.pro.user.3.2-pre1
-testing/build-tests-Desktop_Qt_5_5_0_GCC_64bit-Debug/tests
 testing/gtest/gtest.pro.user
 testing/tests/tests.pro.user
 testing/tests/tests.pro.user.18
 testing/tests/tests.pro.user.3.2-pre1
+
+doxygen.errs
+doxygen_sqlite3.db
+html
+latex

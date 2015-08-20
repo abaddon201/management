@@ -2,7 +2,8 @@
 #define SERVER_INTERNAL_STORAGE_H
 
 struct Storage {
-  Storage() {}
+  Storage() : production_stored{0}, raw_stored{0} {}
+  Storage(int prod, int raw) : production_stored{prod}, raw_stored{raw} {}
   ~Storage() {}
 
   ///@brief Хранящаяся на складе не реализованная продукция

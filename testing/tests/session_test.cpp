@@ -116,44 +116,81 @@ TEST(Session, ProcessBids) {
   // <TechnicalDetails>
   //
   // </TechnicalDetails>
-  /*allequal_raw_bids.clear();
-  for(int i=0;i<4;i++) {
-    bid.player=(i+1)*10;
-    bid.accepted_quantity=0;
-    bid.requested_cost=1000;
-    bid.requested_quantity=3;
-    allequal_raw_bids.push_back(bid);
-  }
-  allequal_production_bids.clear();
-  for(int i=0;i<4;i++) {
-    bid.player=(i+1)*10;
-    bid.accepted_quantity=0;
-    bid.requested_cost=1000;
-    bid.requested_quantity=3;
-    allequal_production_bids.push_back(bid);
-  }
-  s.processBids(4, allequal_raw_bids, allequal_production_bids);
-  EXPECT_EQ(allequal_raw_bids.at(0).accepted_quantity, 3);
-  EXPECT_EQ(allequal_raw_bids.at(1).accepted_quantity, 3);
-  EXPECT_EQ(allequal_raw_bids.at(2).accepted_quantity, 2);
-  EXPECT_EQ(allequal_raw_bids.at(3).accepted_quantity, 0);
+  bool res=s.connectPlayer(111);
+  EXPECT_TRUE(res);
+  res=s.connectPlayer(121);
+  EXPECT_TRUE(res);
+  res=s.connectPlayer(131);
+  EXPECT_TRUE(res);
+  res=s.connectPlayer(141);
+  EXPECT_TRUE(res);
+  Player::List::iterator it = s._player_pointer_list.begin();
+  // 111
+  (*it)->_storage.production_stored = 4;
+  (*it)->_current_sell_production_bid.player = (*it)->_id;
+  (*it)->_current_sell_production_bid.accepted_quantity = 0;
+  (*it)->_current_sell_production_bid.requested_cost = 1000;
+  (*it)->_current_sell_production_bid.requested_quantity = 3;
+  (*it)->_current_buy_raw_bid.player = (*it)->_id;
+  (*it)->_current_buy_raw_bid.accepted_quantity = 0;
+  (*it)->_current_buy_raw_bid.requested_cost = 100;
+  (*it)->_current_buy_raw_bid.requested_quantity = 3;
+  (*it)->_state = Player::State::READY;
+  ++it;
+  // 121
+  (*it)->_storage.production_stored = 4;
+  (*it)->_current_sell_production_bid.player = (*it)->_id;
+  (*it)->_current_sell_production_bid.accepted_quantity = 0;
+  (*it)->_current_sell_production_bid.requested_cost = 10000;
+  (*it)->_current_sell_production_bid.requested_quantity = 3;
+  (*it)->_current_buy_raw_bid.player = (*it)->_id;
+  (*it)->_current_buy_raw_bid.accepted_quantity = 0;
+  (*it)->_current_buy_raw_bid.requested_cost = 1000;
+  (*it)->_current_buy_raw_bid.requested_quantity = 3;
+  (*it)->_state = Player::State::READY;
+  ++it;
+  // 131
+  (*it)->_storage.production_stored = 4;
+  (*it)->_current_sell_production_bid.player = (*it)->_id;
+  (*it)->_current_sell_production_bid.accepted_quantity = 0;
+  (*it)->_current_sell_production_bid.requested_cost = 1000;
+  (*it)->_current_sell_production_bid.requested_quantity = 3;
+  (*it)->_current_buy_raw_bid.player = (*it)->_id;
+  (*it)->_current_buy_raw_bid.accepted_quantity = 0;
+  (*it)->_current_buy_raw_bid.requested_cost = 100;
+  (*it)->_current_buy_raw_bid.requested_quantity = 3;
+  (*it)->_state = Player::State::READY;
+  ++it;
+  // 141
+  (*it)->_storage.production_stored = 4;
+  (*it)->_current_sell_production_bid.player = (*it)->_id;
+  (*it)->_current_sell_production_bid.accepted_quantity = 0;
+  (*it)->_current_sell_production_bid.requested_cost = 10000;
+  (*it)->_current_sell_production_bid.requested_quantity = 3;
+  (*it)->_current_buy_raw_bid.player = (*it)->_id;
+  (*it)->_current_buy_raw_bid.accepted_quantity = 0;
+  (*it)->_current_buy_raw_bid.requested_cost = 1000;
+  (*it)->_current_buy_raw_bid.requested_quantity = 3;
+  (*it)->_state = Player::State::READY;
 
-  bool raw_randomized = (allequal_raw_bids.at(0).player!=10) || (allequal_raw_bids.at(1).player!=20) || (allequal_raw_bids.at(2).player!=30) || (allequal_raw_bids.at(3).player!=40);
-  EXPECT_TRUE(raw_randomized)
-      << " player 0 id="<<allequal_raw_bids.at(0).player
-      << " player 1 id="<<allequal_raw_bids.at(1).player
-      << " player 2 id="<<allequal_raw_bids.at(2).player
-      << " player 3 id="<<allequal_raw_bids.at(3).player;
+  res = s.beginGame();
+  EXPECT_TRUE(res);
+  s.makeTurn();
+  it = s._player_pointer_list.begin();
+  // 111
+  EXPECT_EQ((*it)->_current_sell_production_bid.accepted_quantity, 3);
+  EXPECT_EQ((*it)->_current_buy_raw_bid.accepted_quantity, 0);
+  ++it;
+  // 121
+  EXPECT_EQ((*it)->_current_sell_production_bid.accepted_quantity, 0);
+  EXPECT_EQ((*it)->_current_buy_raw_bid.accepted_quantity, 3);
+  ++it;
+  // 131
+  EXPECT_EQ((*it)->_current_sell_production_bid.accepted_quantity, 3);
+  EXPECT_EQ((*it)->_current_buy_raw_bid.accepted_quantity, 0);
+  ++it;
+  // 141
+  EXPECT_EQ((*it)->_current_sell_production_bid.accepted_quantity, 0);
+  EXPECT_EQ((*it)->_current_buy_raw_bid.accepted_quantity, 3);
 
-  EXPECT_EQ(allequal_production_bids.at(0).accepted_quantity, 3);
-  EXPECT_EQ(allequal_production_bids.at(1).accepted_quantity, 3);
-  EXPECT_EQ(allequal_production_bids.at(2).accepted_quantity, 2);
-  EXPECT_EQ(allequal_production_bids.at(3).accepted_quantity, 0);
-
-  bool prod_randomized = (allequal_production_bids.at(0).player!=10) || (allequal_production_bids.at(1).player!=20) || (allequal_production_bids.at(2).player!=30) || (allequal_production_bids.at(3).player!=40);
-  EXPECT_TRUE(prod_randomized)
-      << " player 0 id="<<allequal_production_bids.at(0).player
-      << " player 1 id="<<allequal_production_bids.at(1).player
-      << " player 2 id="<<allequal_production_bids.at(2).player
-      << " player 3 id="<<allequal_production_bids.at(3).player;*/
 }

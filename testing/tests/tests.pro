@@ -20,7 +20,8 @@ SOURCES += \
     ../../server/player.cpp \
     ../../server/ruleset.cpp \
     ../gtest/gtest_main.cc \
-    session_test.cpp
+    session_test.cpp \
+    player_test.cpp
 
 INCLUDEPATH+= ../../include/server/internal ../../include/server
 INCLUDEPATH+= ../gtest/include

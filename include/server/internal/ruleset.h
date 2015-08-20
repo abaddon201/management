@@ -5,6 +5,7 @@
 #include <vector>
 
 struct Ruleset {
+  ///@brief Стоимость производства продукции. Первый параметр - кол-во материала, второй - сумма денег
   using ManufacturingCost = std::pair<int,int>;
   ///@brief Параметр рынка для описания сырья/продукции.
   /// формат: кол-во (коэффициент, на который домножается кол-во необанкротившихся игроков), цена
@@ -14,9 +15,9 @@ struct Ruleset {
   Ruleset(int tt, unsigned mpl, int fc, int rc, int pc, ManufacturingCost mc, int m, int fbt, int fbc, int sr, int sp, int sfc, int ms,
           std::vector<std::vector<double>> msm, std::vector<MarketParam> mr, std::vector<MarketParam> mp) :
       turn_timeout{tt}, max_players{mpl},
-      factory_cost{fc}, raw_cost{rc}, product_cost{pc},
+      factory_cost{fc}, raw_store_cost{rc}, product_store_cost{pc},
       manufacturing_cost{mc},
-      money{m}, factory_build_time{fbt}, factory_build_cost{fbc},
+      startup_money{m}, factory_build_time{fbt}, factory_build_cost{fbc},
       startup_raw{sr}, startup_products{sp}, startup_factory_count{sfc}, market_state{ms},
       market_state_matrix{msm}, market_raw{mr}, market_production{mp} {};
   ~Ruleset() {};
@@ -28,13 +29,13 @@ struct Ruleset {
   ///@brief Стоимость содержания фабрики
   int factory_cost;
   ///@brief Стоимость сырья оставшегося на складе
-  int raw_cost;
+  int raw_store_cost;
   ///@brief Стоимость продукции оставшейся на складе
-  int product_cost;
+  int product_store_cost;
   ///@brief Стоимость производства изделия (кол-во сырья, деньги)
   ManufacturingCost manufacturing_cost;
   ///@brief Первоначальный капитал
-  int money;
+  int startup_money;
   ///@brief Время постройки фабрики
   int factory_build_time;
   ///@brief Стоимость постройки фабрики (чётное)
